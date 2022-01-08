@@ -4,6 +4,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
 import * as bodyParser from 'body-parser';
+import * as express from 'express';
+import { join } from 'path';
 
 const port = process.env.PORT || 3000;
 async function bootstrap() {
@@ -16,14 +18,19 @@ async function bootstrap() {
     origin: '*',
   });
 
-  const options = new DocumentBuilder()
-    .setTitle('API DOCUMENTATION')
-    .setDescription('Swagger demo API description')
+  app.setGlobalPrefix(process.env.API_PREFIX);
+
+  app.use('/images', express.static(join(__dirname, '..', 'images')));
+
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle('Application API Documentation')
+    .setDescription('post and put request on file upload')
     .setVersion('1.0')
     .build();
 
-  const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('api', app, document);
+  const doc = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('', app, doc);
+
   await app.listen(port || 3000).then(() => {
     console.log(`====>App started in port ${port}<====`);
   });
