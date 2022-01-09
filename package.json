@@ -49,6 +49,8 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.4",
+    "sib-api-v3-sdk": "^8.2.1",
+    "sib-api-v3-typescript": "^2.2.2",
     "swagger-ui-express": "^4.1.4",
     "xss-clean": "^0.1.1"
   },
