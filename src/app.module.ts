@@ -1,3 +1,4 @@
+import { UtilsModule } from './utils/utils.module';
 // import { DesignationModule } from './designation/designation.module';
 // import { EntityModule } from './entity/entity.module';
 // import { MediaModule } from './media/media.module';
@@ -34,6 +35,7 @@ import { ConfigModule } from '@nestjs/config';
     // AuthModule,
     SharedModule,
     UserModule,
+    UtilsModule,
     // OrganizationModule,
     // RoleModule,
     // DepartmentModule,
