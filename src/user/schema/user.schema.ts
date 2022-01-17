@@ -227,8 +227,8 @@ export const UserSchema = new mongoose.Schema(
 
     user_email: EmailSchema,
 
-    user_profile_image: { type: Schema.Types.ObjectId, ref: 'media' },
-    user_background_image: { type: Schema.Types.ObjectId, ref: 'media' },
+    user_profile_image: { type: String },
+    user_background_image: { type: String },
 
     password: {
       type: String,
@@ -244,10 +244,6 @@ export const UserSchema = new mongoose.Schema(
       ref: 'role',
     },
 
-    // user_location: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "location",
-    // },
     user_dob: {
       type: String,
     },
@@ -267,7 +263,6 @@ export const UserSchema = new mongoose.Schema(
     user_password_history: [PasswordHistorySchema],
     user_about: LanguageSchema,
     user_headline: LanguageSchema,
-    user_media: [MediaSchema],
     user_password_secret: {
       type: Number,
     },
@@ -276,8 +271,7 @@ export const UserSchema = new mongoose.Schema(
     },
     created_by: { type: String },
     is_system: { type: Boolean },
-    // article: { type: mongoose.Schema.Types.ObjectId, ref: "article" },
-    // tags: [{ type: mongoose.Schema.Types.ObjectId, ref: "tags" }],
+   
     created_at: {
       type: Date,
       default: Date.now,
@@ -288,11 +282,7 @@ export const UserSchema = new mongoose.Schema(
     updated_by: {
       type: String,
     },
-    // user_preference: { type: mongoose.Schema.Types.Mixed },
-    // user_notification_token: {
-    //   type: "String",
-    //   example: "push notification token",
-    // },
+  
   },
   {
     collection: 'user',
@@ -300,13 +290,3 @@ export const UserSchema = new mongoose.Schema(
   },
 );
 
-// UserSchema.pre("save", async function(next: mongoose.HookNextFunction) {
-//   try {
-//     if (!this.isModified("password")) return next();
-//     const hashed = await bcrypt.hash(this["password"], 10);
-//     this["password"] = hashed;
-//     return next();
-//   } catch (error) {
-//     return next(error);
-//   }
-// });

@@ -1,3 +1,4 @@
+import { AuthService } from './../auth/auth.service';
 import { UtilsService } from './../utils/utils.service';
 
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
@@ -15,6 +16,7 @@ export class UserService {
     @InjectModel('user') private userModel: Model<IUserModel>,
     private sservice: SharedService,
     private utilsService: UtilsService,
+    private aservice: AuthService,
   ) {}
 
   async findByLogin(userDto: LoginDto) {
@@ -39,8 +41,7 @@ export class UserService {
     if (user)
       throw new AppException('User already exist', HttpStatus.BAD_REQUEST);
 
-    const salt = bcrypt.genSaltSync(10);
-    const hashed = bcrypt.hashSync(body.password, salt);
+    const hashed = await this.aservice.createPasswordHash(body);
 
     let fv = {
       organization_code: organization_code,
@@ -56,7 +57,7 @@ export class UserService {
           language: body.lng,
         },
       ],
-      code: this.sservice.random6DigitCodeGenerator(),
+
       user_email: {
         type: 'primary',
         email: body.email,
@@ -66,14 +67,142 @@ export class UserService {
 
     let createdUser = await this.userModel.create(fv);
 
-    setTimeout(() => {
-      this.userModel
-        .updateOne({ _id: createdUser._id }, { code: null })
-        .then(() => console.log('updated code'));
-    }, 180000);
+    const d = await this.resetCodeGeneratorDB(createdUser);
+    if (d) {
+      this.triggerMail(d);
+    }
+    return await this.aservice.generateToken(d);
+  }
 
-    this.triggerMail(createdUser);
-    return createdUser; //'record created successfully';
+  async updateProfile(body, organization_code, token) {
+    const user = await this.userModel.findOne({
+      organization_code: organization_code,
+      _id: token.id,
+    });
+
+    if (!user)
+      throw new AppException('User does not exist', HttpStatus.NOT_FOUND);
+
+    let fv = { updated_at: new Date().toISOString() };
+    if (body.hasOwnProperty('first_name')) {
+      fv['first_name'] = [
+        {
+          description: body.first_name,
+          language: body.lng,
+        },
+      ];
+    }
+
+    if (body.hasOwnProperty('last_name')) {
+      fv['last_name'] = [
+        {
+          description: body.last_name,
+          language: body.lng,
+        },
+      ];
+    }
+
+    if (body.hasOwnProperty('user_profile_image')) {
+      fv['user_profile_image'] = body.user_profile_image;
+    }
+
+    if (body.hasOwnProperty('user_background_image')) {
+      fv['user_background_image'] = body.user_background_image;
+    }
+
+    if (body.hasOwnProperty('user_dob')) {
+      fv['user_dob'] = body.user_dob;
+    }
+    if (body.hasOwnProperty('user_gender')) {
+      fv['user_gender'] = body.user_gender;
+    }
+
+    if (body.hasOwnProperty('user_account_status')) {
+      fv['user_account_status'] = body.user_account_status;
+    }
+
+    if (body.hasOwnProperty('user_about')) {
+      fv['user_about'] = {
+        description: body.user_about,
+        language: body.lng,
+      };
+    }
+
+    if (body.hasOwnProperty('user_headline')) {
+      fv['user_headline'] = {
+        description: body.user_headline,
+        language: body.lng,
+      };
+    }
+
+    await this.userModel.updateOne({ organization_code, _id: token.id }, fv, {
+      new: true,
+    });
+
+    const d = await this.userModel.findOne({
+      _id: token.id,
+      organization_code,
+    });
+
+    return await this.aservice.generateToken(d);
+  }
+
+  async forgotPassword(data, organization_code) {
+    let foundUser = await this.userModel.findOne({
+      'user_email.email': data.email,
+      organization_code,
+    });
+
+    if (!foundUser)
+      throw new AppException('user does not exist', HttpStatus.NOT_FOUND);
+
+    if (foundUser) {
+      const data = await this.resetCodeGeneratorDB(foundUser);
+      if (data) {
+        this.triggerMail(data);
+      }
+    }
+    return { _id: foundUser._id };
+  }
+
+  async resetPassword(data, organization_code) {
+    const hashed = this.aservice.createPasswordHash(data);
+    if (!hashed)
+      throw new AppException(
+        'no hashed created',
+        HttpStatus.EXPECTATION_FAILED,
+      );
+    await this.userModel.updateOne(
+      { _id: data._id, organization_code },
+      { password: hashed },
+    );
+
+    const d = await this.userModel.findOne({
+      _id: data._id,
+      organization_code,
+    });
+    if (!d) throw new AppException('invalid credentials', HttpStatus.NOT_FOUND);
+    return this.aservice.generateToken(d);
+  }
+
+  async resetCodeGeneratorDB(data) {
+    const code = this.sservice.random6DigitCodeGenerator();
+    const uData = await this.userModel.updateOne(
+      { _id: data._id, organization_code: data.organization_code },
+      { code },
+    );
+    if (uData) {
+      setTimeout(() => {
+        this.userModel
+          .updateOne({ _id: data._id }, { code: null })
+          .then(r => {});
+      }, 180000);
+    }
+
+    return await this.userModel.findOne({
+      _id: data._id,
+      organization_code: data.organization_code,
+    });
   }
 
   async verifyCode(data, organization_code) {
@@ -90,12 +219,6 @@ export class UserService {
       return { status: 'verified' };
     }
     if (userData && data.code != userData.code) {
-      console.log(
-        'both code tracking here',
-        data.code,
-        'userData',
-        userData.code,
-      );
       throw new AppException(
         'the entered code is incorrect',
         HttpStatus.UNAUTHORIZED,
@@ -135,9 +258,7 @@ export class UserService {
       setTimeout(() => {
         this.userModel
           .updateOne({ _id: userData._id }, { code: null })
-          .then(r => {
-            console.log('res here', r);
-          });
+          .then(r => {});
       }, 180000);
     }
 
@@ -146,15 +267,12 @@ export class UserService {
       organization_code,
     });
     if (latestCodeData) {
-      console.log('code', code, 'user info', latestCodeData.code);
-
       this.triggerMail(latestCodeData);
     }
     return { status: 'new code sent successfully' };
   }
 
   async triggerMail(data) {
-    // https://api.sendinblue.com/v3/smtp/email
     let sendSmtpEmail = {
       to: [
         {
