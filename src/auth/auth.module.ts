@@ -20,7 +20,7 @@ import { roleAssignmentSchema } from "src/role/schema/role-assignment.schema";
       { name: "roleAssignment", schema: roleAssignmentSchema },
     ]),
     JwtModule.register({
-      secret: "SXUN#*DKJFDGF&#EF",
+      secret: "SXUNBURNDTALKS#*DKJFDGF&#EF",
       signOptions: { expiresIn: "1d" },
     }),
     SharedModule,
