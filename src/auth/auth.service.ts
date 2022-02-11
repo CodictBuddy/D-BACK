@@ -146,6 +146,7 @@ export class AuthService {
           user_dob: 1,
           user_gender: 1,
           user_about: 1,
+          user_headline: 1,
         });
 
       const payload: UserToken = {
