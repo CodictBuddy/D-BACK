@@ -24,7 +24,7 @@ export class MediaService {
     const data = await this.mediaModel.deleteOne({
       public_id: body.public_id,
       organization_code,
-      user_id:body._id
+      user_id: body.user_id,
     });
     if (data) {
       return { status: 'success', message: 'record removed successfully' };
