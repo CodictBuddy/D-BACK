@@ -147,6 +147,20 @@ export class AuthService {
           user_gender: 1,
           user_about: 1,
           user_headline: 1,
+          user_profile_image: 1,
+          user_background_image: 1,
+        })
+        .populate('user_profile_image', {
+          _id: 1,
+          public_id: 1,
+          url: 1,
+          type: 1,
+        })
+        .populate('user_background_image', {
+          _id: 1,
+          public_id: 1,
+          url: 1,
+          type: 1,
         });
 
       const payload: UserToken = {

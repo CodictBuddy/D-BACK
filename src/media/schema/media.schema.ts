@@ -1,5 +1,7 @@
 import * as mongoose from 'mongoose';
 
+import { obj_id } from '../../utils/common.constants';
+
 export interface IMediaModel extends mongoose.Document {
   organization_code?: any;
   public_id: string;
@@ -14,7 +16,7 @@ export const mediaSchema = new mongoose.Schema(
     organization_code: { type: String },
     public_id: { type: String },
     user_id: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: obj_id,
       ref: 'user',
     },
     url: { type: String },

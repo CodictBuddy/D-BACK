@@ -1,7 +1,5 @@
 import * as mongoose from 'mongoose';
-import * as bcrypt from 'bcryptjs';
-import { Schema } from 'mongoose';
-// import { IMedia } from 'src/media/schema/media.schema';
+import { obj_id } from '../../utils/common.constants';
 
 export interface ILanguageModel {
   description?: string;
@@ -183,7 +181,7 @@ export const MediaSchema = new mongoose.Schema({
     default: 'Public',
   }, //public, private, mutual
   media_id: {
-    type: Schema.Types.ObjectId,
+    type: obj_id,
     ref: 'media',
   },
 });
@@ -227,8 +225,8 @@ export const UserSchema = new mongoose.Schema(
 
     user_email: EmailSchema,
 
-    user_profile_image: { type: String },
-    user_background_image: { type: String },
+    user_profile_image: { type: obj_id, ref: 'media' },
+    user_background_image: { type: obj_id, ref: 'media' },
 
     password: {
       type: String,
@@ -240,7 +238,7 @@ export const UserSchema = new mongoose.Schema(
     },
 
     user_role: {
-      type: Schema.Types.ObjectId,
+      type: obj_id,
       ref: 'role',
     },
 
@@ -271,7 +269,7 @@ export const UserSchema = new mongoose.Schema(
     },
     created_by: { type: String },
     is_system: { type: Boolean },
-   
+
     created_at: {
       type: Date,
       default: Date.now,
@@ -282,11 +280,9 @@ export const UserSchema = new mongoose.Schema(
     updated_by: {
       type: String,
     },
-  
   },
   {
     collection: 'user',
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
   },
 );
-

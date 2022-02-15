@@ -73,6 +73,73 @@ export class UserService {
     }
     return await this.aservice.generateToken(d);
   }
+  /**
+   * get the user profile  function
+   */
+  async getProfile(user_id, organization_code, token) {
+    const userMeta = {};
+    const user = await this.userModel
+      .findOne({
+        _id: user_id,
+        organization_code,
+      })
+      .lean()
+      .select({
+        user_account_status: 1,
+        first_name: 1,
+        last_name: 1,
+        user_email: 1,
+        user_phone_number: 1,
+        user_dob: 1,
+        user_gender: 1,
+        user_about: 1,
+        user_headline: 1,
+        user_profile_image: 1,
+        user_background_image: 1,
+      })
+      .populate('user_profile_image', {
+        public_id: 1,
+        url: 1,
+        type: 1,
+      })
+      .populate('user_background_image', {
+        public_id: 1,
+        url: 1,
+        type: 1,
+      });
+    if (!user)
+      throw new AppException('User does not exist', HttpStatus.NOT_FOUND);
+
+    userMeta['self'] = token.id === user_id;
+
+    return { userMeta, user };
+  }
+
+  /**
+   *
+   * suggested users list based on users activities
+   */
+
+  async suggestions(organization_code, token) {
+    const user = await this.userModel
+      .find({
+        organization_code: organization_code,
+        _id: { $eq: token.id },
+      })
+      .select({
+        first_name: 1,
+        last_name: 1,
+        user_email: 1,
+        user_headline: 1,
+        user_profile_image: 1,
+      })
+      .populate('user_profile_image', {
+        url: 1,
+        type: 1,
+      });
+
+    return { user };
+  }
 
   async updateProfile(body, organization_code, token) {
     const user = await this.userModel.findOne({

@@ -6,6 +6,7 @@ import {
   Param,
   UseGuards,
   Patch,
+  Get,
 } from '@nestjs/common';
 import { SharedService } from 'src/shared/shared.service';
 import { UserService } from './user.service';
@@ -13,7 +14,7 @@ import { GetToken } from 'src/shared/decorator/getuser.decorator';
 import { UserToken } from './dto/usertoken.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
-@Controller(':organization_portal_name/user')
+@Controller(':organization_code/user')
 export class UserController {
   constructor(
     private userService: UserService,
@@ -24,7 +25,7 @@ export class UserController {
   async signUp(
     @Body() body: any,
     @Res() res: any,
-    @Param('organization_portal_name') organization,
+    @Param('organization_code') organization,
   ) {
     try {
       let data = await this.userService.signUp(body, +organization);
@@ -42,7 +43,7 @@ export class UserController {
   async forgotPassword(
     @Body() body: any,
     @Res() res: any,
-    @Param('organization_portal_name') organization,
+    @Param('organization_code') organization,
   ) {
     try {
       let data = await this.userService.forgotPassword(body, +organization);
@@ -60,10 +61,53 @@ export class UserController {
   async resetPassword(
     @Body() body: any,
     @Res() res: any,
-    @Param('organization_portal_name') organization,
+    @Param('organization_code') organization,
   ) {
     try {
       let data = await this.userService.resetPassword(body, +organization);
+      return res.json(data);
+    } catch (err) {
+      const { code, response } = this.sservice.processError(
+        err,
+        this.constructor.name,
+      );
+      return res.status(code).send(response);
+    }
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('suggestions')
+  async suggestions(
+    @Res() res: any,
+    @GetToken() token: UserToken,
+    @Param('organization_code') organization,
+  ) {
+    try {
+      let data = await this.userService.suggestions(+organization, token);
+      return res.json(data);
+    } catch (err) {
+      const { code, response } = this.sservice.processError(
+        err,
+        this.constructor.name,
+      );
+      return res.status(code).send(response);
+    }
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/:id')
+  async get(
+    @Param('id') user_id: string,
+    @Res() res: any,
+    @GetToken() token: UserToken,
+    @Param('organization_code') organization,
+  ) {
+    try {
+      let data = await this.userService.getProfile(
+        user_id,
+        +organization,
+        token,
+      );
       return res.json(data);
     } catch (err) {
       const { code, response } = this.sservice.processError(
@@ -80,10 +124,14 @@ export class UserController {
     @Body() body: any,
     @Res() res: any,
     @GetToken() token: UserToken,
-    @Param('organization_portal_name') organization,
+    @Param('organization_code') organization,
   ) {
     try {
-      let data = await this.userService.updateProfile(body, +organization ,token);
+      let data = await this.userService.updateProfile(
+        body,
+        +organization,
+        token,
+      );
       return res.json(data);
     } catch (err) {
       const { code, response } = this.sservice.processError(
@@ -98,7 +146,7 @@ export class UserController {
   async verifyEmail(
     @Body() body: any,
     @Res() res: any,
-    @Param('organization_portal_name') organization,
+    @Param('organization_code') organization,
   ) {
     try {
       let data = await this.userService.verifyCode(body, +organization);
@@ -116,7 +164,7 @@ export class UserController {
   async resendCode(
     @Body() body: any,
     @Res() res: any,
-    @Param('organization_portal_name') organization,
+    @Param('organization_code') organization,
   ) {
     try {
       let data = await this.userService.retryCode(body, +organization);
@@ -129,5 +177,4 @@ export class UserController {
       return res.status(code).send(response);
     }
   }
-
 }

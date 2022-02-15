@@ -18,6 +18,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { MediaModule } from './media/media.module';
+import { ConnectionsModule } from './connections/connections.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { MediaModule } from './media/media.module';
     UserModule,
     UtilsModule,
     MediaModule,
+    ConnectionsModule,
     // OrganizationModule,
     // RoleModule,
     // DepartmentModule,

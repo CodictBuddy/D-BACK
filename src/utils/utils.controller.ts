@@ -16,8 +16,9 @@ import { MediaService } from 'src/media/media.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { GetToken } from 'src/shared/decorator/getuser.decorator';
 import { UserToken } from 'src/user/dto/usertoken.dto';
+import { Itypes } from './common interfaces/interfaces';
 
-@Controller(':organization_portal_name/utils')
+@Controller(':organization_code/utils')
 export class UtilsController {
   constructor(
     private readonly utilsS: UtilsService,
@@ -26,19 +27,20 @@ export class UtilsController {
   ) {}
 
   @UseGuards(JwtAuthGuard)
-  @Post('file')
+  @Post('file/:type')
   @UseInterceptors(FileInterceptor('file'))
   async create(
     @UploadedFile() file,
     @GetToken() token: UserToken,
     @Res() res: any,
-    @Param('organization_portal_name') organization_code,
+    @Param('organization_code') organization_code,
+    @Param('type') type: Itypes,
   ) {
     try {
       const data = await this.utilsS.uploadImage(file);
       if (data) {
         const mediaData = await this.mediaService.uploadMedia(
-          { ...data, _id: token.id, type: 'profile' },
+          { ...data, _id: token.id, type },
           organization_code,
         );
         return res.json(mediaData);
@@ -58,7 +60,7 @@ export class UtilsController {
     @Body() body: { public_id: string },
     @Res() res: any,
     @GetToken() token: UserToken,
-    @Param('organization_portal_name') organization_code,
+    @Param('organization_code') organization_code,
   ) {
     try {
       const data = await this.utilsS.deleteFile(body.public_id);
