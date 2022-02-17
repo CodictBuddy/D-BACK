@@ -13,7 +13,7 @@ export const connectionsSchema = new mongoose.Schema(
     organization_code: {
       type: Number,
     },
-    type: { type: String, example: 'relationship/followFollowing/block' },
+    type: { type: String, example: 'connection/following/block' },
     user_id: { type: obj_id, ref: 'user' },
     target_user_id: { type: obj_id, ref: 'user' },
     connection_status: {
