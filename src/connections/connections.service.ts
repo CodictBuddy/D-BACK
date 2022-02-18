@@ -78,4 +78,68 @@ export class ConnectionsService {
 
     return { connections };
   }
+
+  async getDetail(organization_code, token, body) {
+    const fo = this.processCondition(
+      organization_code,
+      token.id,
+      body.user_id,
+      body.connection_type,
+    );
+
+    return await this.connModel.findOne(fo);
+  }
+
+  async create(organization_code, token, body) {
+    const fv = {
+      organization_code,
+      user_id: token.id,
+      target_user_id: body.user_id,
+      type: body.type,
+    };
+    return await this.connModel.create(fv);
+  }
+  async update(organization_code, token, body) {
+    const fo = this.processCondition(
+      organization_code,
+      token.id,
+      body.user_id,
+      body.connection_type,
+    );
+
+    return await this.connModel.findOneAndUpdate(
+      { _id: body.conn_id, ...fo },
+      { connection_status: body.connection_status },
+    );
+  }
+
+  async remove(organization_code, token, body) {
+    const fo = this.processCondition(
+      organization_code,
+      token.id,
+      body.user_id,
+      body.connection_type,
+    );
+    return await this.connModel.findOneAndRemove({ ...fo, type: body.type });
+  }
+
+  processCondition(organization_code, user_id_1, user_id_2, type) {
+    let filterObj = {
+      $or: [],
+    };
+    filterObj['$or'].push({
+      organization_code,
+      target_user_id: user_id_1,
+      user_id: user_id_2,
+      type,
+    });
+    filterObj['$or'].push({
+      organization_code,
+      target_user_id: user_id_2,
+      user_id: user_id_1,
+      type,
+    });
+
+    return filterObj;
+  }
 }
