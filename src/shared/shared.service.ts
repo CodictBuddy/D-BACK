@@ -64,4 +64,58 @@ export class SharedService {
     }
     return o;
   }
+
+  processCondition(organization_code, user_id_1, user_id_2, type) {
+    let filterObj = this.commonFilterObjectCreator(organization_code, type)
+      .filterObj;
+    const commFilter = this.commonFilterObjectCreator(organization_code, type)
+      .commFilter;
+    filterObj['$or'].push({
+      ...commFilter,
+      target_user_id: user_id_1,
+      user_id: user_id_2,
+    });
+    filterObj['$or'].push({
+      ...commFilter,
+      target_user_id: user_id_2,
+      user_id: user_id_1,
+    });
+
+    return filterObj;
+  }
+
+  processfetchMyRecordsCondition(organization_code, user_id, type?) {
+    let filterObj = this.commonFilterObjectCreator(organization_code, type)
+      .filterObj;
+
+    const commFilter = this.commonFilterObjectCreator(organization_code, type)
+      .commFilter;
+
+    filterObj['$or'].push({
+      ...commFilter,
+      target_user_id: user_id,
+    });
+    filterObj['$or'].push({
+      ...commFilter,
+      user_id: user_id,
+    });
+
+    return filterObj;
+  }
+
+  commonFilterObjectCreator(organization_code, type?) {
+    const commFilter = {
+      organization_code,
+    };
+    if (type) {
+      commFilter['type'] = type;
+    }
+
+    return {
+      filterObj: {
+        $or: [],
+      },
+      commFilter,
+    };
+  }
 }

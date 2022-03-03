@@ -19,6 +19,7 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { MediaModule } from './media/media.module';
 import { ConnectionsModule } from './connections/connections.module';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { ConnectionsModule } from './connections/connections.module';
     UtilsModule,
     MediaModule,
     ConnectionsModule,
+    NotificationModule,
     // OrganizationModule,
     // RoleModule,
     // DepartmentModule,

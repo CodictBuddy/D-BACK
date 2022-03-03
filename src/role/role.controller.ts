@@ -11,7 +11,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from "@nestjs/common";
-import { response, Response } from "express";
+import {  Response } from "express";
 import { RoleService } from "./role.service";
 
 @Controller("role")

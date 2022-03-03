@@ -1,3 +1,4 @@
+import { socketGateway } from './../utils/socket/socket-gateway.service';
 import { UtilsService } from './../utils/utils.service';
 import { Module, Global } from '@nestjs/common';
 import { SharedService } from './shared.service';
@@ -10,7 +11,7 @@ import { SequenceSchema } from './schema/sequence.schema';
     // LoggerModule,
     MongooseModule.forFeature([{ name: 'sequence', schema: SequenceSchema }]),
   ],
-  providers: [SharedService, UtilsService],
-  exports: [SharedService, UtilsService],
+  providers: [SharedService, UtilsService, socketGateway],
+  exports: [SharedService, UtilsService, socketGateway],
 })
 export class SharedModule {}

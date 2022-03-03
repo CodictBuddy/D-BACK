@@ -1,3 +1,4 @@
+import { NotificationModule } from './../notification/notification.module';
 import { SharedModule } from './../shared/shared.module';
 import { AuthModule } from './../auth/auth.module';
 import { Module } from '@nestjs/common';
@@ -13,6 +14,7 @@ import { connectionsSchema } from './schema/connections.schema';
     ]),
     SharedModule,
     AuthModule,
+    NotificationModule,
   ],
   controllers: [ConnectionsController],
   providers: [ConnectionsService],

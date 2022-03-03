@@ -1,3 +1,5 @@
+import { NotificationService } from './../notification/notification.service';
+import { socketGateway } from './../utils/socket/socket-gateway.service';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -13,6 +15,8 @@ export class ConnectionsService {
     private sservice: SharedService,
     private utilsService: UtilsService,
     private aservice: AuthService,
+    private socket: socketGateway,
+    private notificationService: NotificationService,
   ) {}
 
   async getConnectionList(
@@ -43,6 +47,7 @@ export class ConnectionsService {
     type: { type: String, example: 'connection /following /block' },
     user_id: { type: obj_id, ref: 'user' },
     target_user_id: { type: obj_id, ref: 'user' }
+    view_type  == 0 means i send  and 1 means i recieved
   */
     const filterObject = { organization_code, connection_status, type };
     let populateString = '';
@@ -80,7 +85,7 @@ export class ConnectionsService {
   }
 
   async getDetail(organization_code, token, body) {
-    const fo = this.processCondition(
+    const fo = this.sservice.processCondition(
       organization_code,
       token.id,
       body.user_id,
@@ -97,10 +102,24 @@ export class ConnectionsService {
       target_user_id: body.user_id,
       type: body.type,
     };
-    return await this.connModel.create(fv);
+
+    const doc = await this.connModel.create(fv);
+    if (doc) {
+      const notificationObj = {
+        user_id: body.user_id,
+        notification_type: body.type,
+        notification_message: body.message,
+      };
+      await this.notificationService.create(
+        organization_code,
+        token,
+        notificationObj,
+      );
+    }
+    return doc;
   }
   async update(organization_code, token, body) {
-    const fo = this.processCondition(
+    const fo = this.sservice.processCondition(
       organization_code,
       token.id,
       body.user_id,
@@ -114,32 +133,12 @@ export class ConnectionsService {
   }
 
   async remove(organization_code, token, body) {
-    const fo = this.processCondition(
+    const fo = this.sservice.processCondition(
       organization_code,
       token.id,
       body.user_id,
       body.connection_type,
     );
     return await this.connModel.findOneAndRemove({ ...fo, type: body.type });
-  }
-
-  processCondition(organization_code, user_id_1, user_id_2, type) {
-    let filterObj = {
-      $or: [],
-    };
-    filterObj['$or'].push({
-      organization_code,
-      target_user_id: user_id_1,
-      user_id: user_id_2,
-      type,
-    });
-    filterObj['$or'].push({
-      organization_code,
-      target_user_id: user_id_2,
-      user_id: user_id_1,
-      type,
-    });
-
-    return filterObj;
   }
 }

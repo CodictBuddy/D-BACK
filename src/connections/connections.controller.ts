@@ -28,7 +28,7 @@ export class ConnectionsController {
   // 8.remove connection -done
 
   @UseGuards(JwtAuthGuard)
-  @Get('')
+  @Post('detail')
   async getDetail(
     @Res() res: any,
     @GetToken() token: UserToken,
