@@ -14,7 +14,7 @@ export class socketGateway implements OnGatewayDisconnect, OnGatewayConnection {
   server: Server;
   nicknames: Map<string, string> = new Map();
 
-//   constructor(private chatService: ChatService) {}
+  //   constructor(private chatService: ChatService) {}
   handleDisconnect(client: Socket) {
     this.server.emit('users-changed', {
       user: this.nicknames[client.id],
@@ -119,6 +119,7 @@ export class socketGateway implements OnGatewayDisconnect, OnGatewayConnection {
     //   message_room_id: message.room_id,
     //   content: message.content,
     // });
+    //
     // return message._id;
   }
 }
