@@ -22,7 +22,7 @@ export class NotificationService {
       type: body.notification_type,
       notification_message: body.message,
       isRead: false,
-      isNew: true,
+      isNewNotification: true,
     };
 
     const ob = await this.notificationModel.create(fv);
@@ -87,7 +87,7 @@ export class NotificationService {
     const notifications = await this.notificationModel.find({
       ...fo,
       isRead: false,
-      isNew: true,
+      isNewNotification: true,
     });
 
     return { notifications, count: notifications.length };

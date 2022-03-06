@@ -8,7 +8,7 @@ export interface INotificationModel extends mongoose.Document {
   notification_type?: any;
   notification_message?: string;
   isRead: boolean;
-  isNew: boolean;
+  isNewNotification: boolean;
 }
 export const notificationSchema = new mongoose.Schema(
   {
@@ -24,7 +24,7 @@ export const notificationSchema = new mongoose.Schema(
     },
     notification_message: { type: String },
     isRead: { type: Boolean, default: false },
-    isNew: { type: Boolean, default: true },
+    isNewNotification: { type: Boolean, default: true },
   },
   {
     collection: 'notification',
