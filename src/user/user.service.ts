@@ -124,7 +124,7 @@ export class UserService {
     const user = await this.userModel
       .find({
         organization_code: organization_code,
-        _id: { $eq: token.id },
+        _id: { $ne: token.id },
       })
       .select({
         first_name: 1,
