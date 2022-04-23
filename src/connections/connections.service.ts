@@ -68,19 +68,27 @@ export class ConnectionsService {
         { target_user_id: token.id },
       ];
     }
-    const connections = await this.connModel.find(filterObject);
-    // .select({
-    //   first_name: 1,
-    //   last_name: 1,
-    //   user_email: 1,
-    //   user_headline: 1,
-    //   user_profile_image: 1,
-    // })
-    // .populate('user_profile_image', {
-    //   url: 1,
-    //   type: 1,
-    // });
-
+    const connections = await this.connModel
+      .find(filterObject)
+      .populate({
+        path: populateString,
+        select: {
+          url: 1,
+          type: 1,
+          first_name: 1,
+          last_name: 1,
+          user_headline: 1,
+          user_profile_image: 1,
+        },
+        populate: {
+          path: 'user_profile_image',
+          model: 'media',
+          select: {
+            url: 1,
+          },
+        },
+      })
+      .select('-organization_code');
     return { connections };
   }
 
@@ -125,10 +133,10 @@ export class ConnectionsService {
       body.user_id,
       body.connection_type,
     );
-
     return await this.connModel.findOneAndUpdate(
       { _id: body.conn_id, ...fo },
       { connection_status: body.connection_status },
+      { new: true },
     );
   }
 
@@ -139,6 +147,10 @@ export class ConnectionsService {
       body.user_id,
       body.connection_type,
     );
-    return await this.connModel.findOneAndRemove({ ...fo, type: body.type });
+
+    return await this.connModel.findOneAndRemove({
+      ...fo,
+      type: body.connection_type,
+    });
   }
 }

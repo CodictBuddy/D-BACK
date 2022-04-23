@@ -88,15 +88,19 @@ export class ConnectionsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Delete('')
+  @Delete(':user_id/:connection_type')
   async remove(
     @Res() res: any,
     @GetToken() token: UserToken,
     @Param('organization_code') organization,
-    @Body() body: any,
+    @Param('user_id') user_id,
+    @Param('connection_type') connection_type,
   ) {
     try {
-      let data = await this.connService.remove(+organization, token, body);
+      let data = await this.connService.remove(+organization, token, {
+        connection_type,
+        user_id,
+      });
       return res.json(data);
     } catch (err) {
       const { code, response } = this.sservice.processError(
