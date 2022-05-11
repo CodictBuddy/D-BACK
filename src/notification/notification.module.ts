@@ -1,3 +1,4 @@
+import { UserModule } from './../user/user.module';
 import { AuthModule } from './../auth/auth.module';
 import { SharedModule } from './../shared/shared.module';
 import { Module } from '@nestjs/common';
@@ -13,6 +14,7 @@ import { notificationSchema } from './schema/notification.schema';
     ]),
     SharedModule,
     AuthModule,
+    UserModule
   ],
   controllers: [NotificationController],
   providers: [NotificationService],

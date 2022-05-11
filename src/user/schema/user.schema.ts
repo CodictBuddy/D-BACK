@@ -227,6 +227,7 @@ export const UserSchema = new mongoose.Schema(
 
     user_profile_image: { type: obj_id, ref: 'media' },
     user_background_image: { type: obj_id, ref: 'media' },
+    user_notification_token: { type: String },
 
     password: {
       type: String,

@@ -202,6 +202,10 @@ export class UserService {
       };
     }
 
+    if (body.hasOwnProperty('user_notification_token')) {
+      fv['user_notification_token'] = body.user_notification_token;
+    }
+
     await this.userModel.updateOne({ organization_code, _id: token.id }, fv, {
       new: true,
     });
@@ -355,5 +359,13 @@ export class UserService {
       },
     };
     await this.utilsService.sendinblue(sendSmtpEmail);
+  }
+
+  async getUserById(userId, organization_code) {
+    let user = await this.userModel.findOne({
+      _id: userId,
+      organization_code,
+    });
+    return { user };
   }
 }
