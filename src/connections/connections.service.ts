@@ -133,11 +133,25 @@ export class ConnectionsService {
       body.user_id,
       body.connection_type,
     );
-    return await this.connModel.findOneAndUpdate(
+    const doc = await this.connModel.findOneAndUpdate(
       { _id: body.conn_id, ...fo },
       { connection_status: body.connection_status },
       { new: true },
     );
+    if (doc) {
+      const notificationObj = {
+        user_id: body.user_id,
+        notification_type: body.connection_type,
+        notification_message: body.message,
+      };
+      await this.notificationService.create(
+        organization_code,
+        token,
+        notificationObj,
+      );
+    }
+    return doc;
+
   }
 
   async remove(organization_code, token, body) {
