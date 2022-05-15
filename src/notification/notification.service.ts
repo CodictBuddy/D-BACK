@@ -123,11 +123,11 @@ export class NotificationService {
         sound: 'default',
         click_action: 'FCM_PLUGIN_ACTIVITY',
       },
-      Webpushconfig: {
-        fcm_options: {
-          link: '/tabs/notification',
-        },
-      },
+      // Webpushconfig: {
+      //   fcm_options: {
+      //     link: '/tabs/notification',
+      //   },
+      // },
     };
 
     const notificationToken = userData?.user?.user_notification_token;
