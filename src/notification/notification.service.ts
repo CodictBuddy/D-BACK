@@ -65,6 +65,7 @@ export class NotificationService {
     );
     return await this.notificationModel.findOneAndRemove({
       ...fo,
+      _id: body.notification_id,
     });
   }
 

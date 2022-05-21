@@ -42,7 +42,6 @@ export class NotificationController {
     }
   }
 
-
   @UseGuards(JwtAuthGuard)
   @Post('')
   async create(
@@ -84,15 +83,19 @@ export class NotificationController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Delete('')
+  @Delete(':notification_type/:notification_id')
   async remove(
     @GetToken() token: UserToken,
     @Param('organization_code') organization,
+    @Param('notification_id') notification_id,
+    @Param('notification_type') notification_type,
     @Res() res: Response,
-    @Body() body: any,
   ) {
     try {
-      let data = await this.notiService.remove(+organization, token, body);
+      let data = await this.notiService.remove(+organization, token, {
+        notification_id,
+        notification_type,
+      });
       return res.json(data);
     } catch (err) {
       const { code, response } = await this.sservice.processError(
@@ -102,8 +105,6 @@ export class NotificationController {
       return res.status(code).json(response);
     }
   }
-
- 
 
   @UseGuards(JwtAuthGuard)
   @Get('')
