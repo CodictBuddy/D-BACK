@@ -116,6 +116,7 @@ export class ConnectionsService {
       const notificationObj = {
         user_id: body.user_id,
         notification_type: body.type,
+        notification_title: body.notification_title,
         notification_message: body.message,
       };
       await this.notificationService.create(
@@ -142,6 +143,7 @@ export class ConnectionsService {
       const notificationObj = {
         user_id: body.user_id,
         notification_type: body.connection_type,
+        notification_title: body.notification_title,
         notification_message: body.message,
       };
       await this.notificationService.create(
@@ -151,7 +153,6 @@ export class ConnectionsService {
       );
     }
     return doc;
-
   }
 
   async remove(organization_code, token, body) {

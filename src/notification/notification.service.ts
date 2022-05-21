@@ -33,6 +33,7 @@ export class NotificationService {
     if (ob) {
       this.socket.catchNotification({ roomId: fv.target_user_id });
       await this.triggerPushNotifications(
+        body.notification_title,
         fv.notification_message,
         fv.target_user_id,
         fv.organization_code,
@@ -103,6 +104,7 @@ export class NotificationService {
   }
 
   async triggerPushNotifications(
+    notification_title,
     notification_message,
     toUserId,
     organization_code,
@@ -118,7 +120,7 @@ export class NotificationService {
 
     const message = {
       notification: {
-        title: 'You have a new notification',
+        title: notification_title || 'You have a new notification',
         body: notification_message,
         sound: 'default',
         click_action: 'FCM_PLUGIN_ACTIVITY',
