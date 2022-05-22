@@ -71,7 +71,9 @@ export class NotificationService {
       organization_code,
       token.id,
     );
-    const notifications = await this.notificationModel.find(fo).sort('desc');
+    const notifications = await this.notificationModel
+      .find(fo)
+      .sort({ created_at: -1 });
     // .select({
     //   first_name: 1,
     //   last_name: 1,
