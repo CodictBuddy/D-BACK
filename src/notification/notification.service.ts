@@ -52,7 +52,10 @@ export class NotificationService {
       body.notification_type,
     );
     return await this.notificationModel.findOneAndUpdate(
-      { _id: body.notification_id, ...fo },
+      {
+        _id: body.notification_id,
+        // , ...fo
+      },
       fv,
       { new: true },
     );
