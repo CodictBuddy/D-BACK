@@ -7,6 +7,7 @@ export interface INotificationModel extends mongoose.Document {
   target_user_id?: string;
   notification_type?: any;
   notification_message?: string;
+  navigation_url?: string;
   isRead: boolean;
   isNewNotification: boolean;
 }
@@ -17,6 +18,7 @@ export const notificationSchema = new mongoose.Schema(
     },
     user_id: { type: obj_id, ref: 'user' },
     target_user_id: { type: obj_id, ref: 'user' },
+    navigation_url: { type: String, example: '/connections/id' },
     type: {
       type: String,
       default: 'Action',

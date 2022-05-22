@@ -24,6 +24,7 @@ export class NotificationService {
       user_id: token.id,
       target_user_id: body.user_id,
       type: body.notification_type,
+      navigation_url: body.navigation_url,
       notification_message: body.notification_message,
       isRead: false,
       isNewNotification: true,
@@ -70,7 +71,7 @@ export class NotificationService {
       organization_code,
       token.id,
     );
-    const notifications = await this.notificationModel.find(fo);
+    const notifications = await this.notificationModel.find(fo).sort('desc');
     // .select({
     //   first_name: 1,
     //   last_name: 1,

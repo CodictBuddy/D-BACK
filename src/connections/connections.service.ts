@@ -117,6 +117,7 @@ export class ConnectionsService {
         user_id: body.user_id,
         notification_type: body.type,
         notification_title: body.notification_title,
+        navigation_url: body.navigation_url,
         notification_message: body.message,
       };
       await this.notificationService.create(
@@ -145,6 +146,7 @@ export class ConnectionsService {
         notification_type: body.connection_type,
         notification_title: body.notification_title,
         notification_message: body.message,
+        navigation_url: body.navigation_url,
       };
       await this.notificationService.create(
         organization_code,
