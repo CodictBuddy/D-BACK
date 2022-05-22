@@ -42,22 +42,13 @@ export class NotificationService {
   }
 
   async update(organization_code, token, body) {
-    const fv = {
-      isRead: body.isRead,
-    };
-    const fo = this.sservice.processCondition(
-      organization_code,
-      token.id,
-      body.user_id,
-      body.notification_type,
-    );
     return await this.notificationModel.findOneAndUpdate(
       {
         _id: body.notification_id,
         organization_code,
         type: body.notification_type,
       },
-      fv,
+      { isRead: body.isRead },
       { new: true },
     );
   }
