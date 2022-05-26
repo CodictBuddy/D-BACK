@@ -84,7 +84,12 @@ export class SharedService {
     return filterObj;
   }
 
-  processfetchMyRecordsCondition(organization_code, user_id, type?) {
+  processfetchMyRecordsCondition(
+    organization_code,
+    user_id,
+    type?,
+    vision = 'all',
+  ) {
     let filterObj = this.commonFilterObjectCreator(organization_code, type)
       .filterObj;
 
@@ -95,10 +100,12 @@ export class SharedService {
       ...commFilter,
       target_user_id: user_id,
     });
-    filterObj['$or'].push({
-      ...commFilter,
-      user_id: user_id,
-    });
+    if (vision === 'all') {
+      filterObj['$or'].push({
+        ...commFilter,
+        user_id: user_id,
+      });
+    }
 
     return filterObj;
   }

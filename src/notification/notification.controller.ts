@@ -11,6 +11,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Res,
   UseGuards,
 } from '@nestjs/common';
@@ -112,9 +113,14 @@ export class NotificationController {
     @Res() res: any,
     @GetToken() token: UserToken,
     @Param('organization_code') organization,
+    @Query('skip') skip,
+    @Query('limit') limit,
   ) {
     try {
-      let data = await this.notiService.getList(+organization, token);
+      let data = await this.notiService.getList(+organization, token, {
+        skip,
+        limit,
+      });
       return res.json(data);
     } catch (err) {
       const { code, response } = this.sservice.processError(

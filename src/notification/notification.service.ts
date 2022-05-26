@@ -66,26 +66,37 @@ export class NotificationService {
     });
   }
 
-  async getList(organization_code, token) {
+  async getList(organization_code, token, body) {
     const fo = this.sservice.processfetchMyRecordsCondition(
       organization_code,
       token.id,
+      null,
+      'mine',
     );
     const notifications = await this.notificationModel
       .find(fo)
-      .sort({ created_at: -1 });
-    // .select({
-    //   first_name: 1,
-    //   last_name: 1,
-    //   user_email: 1,
-    //   user_headline: 1,
-    //   user_profile_image: 1,
-    // })
-    // .populate('user_profile_image', {
-    //   url: 1,
-    //   type: 1,
-    // });
-
+      .sort({ created_at: -1 })
+      .skip(body.skip || 0)
+      .limit(body.limit || 10)
+      .populate({
+        path: 'target_user_id',
+        select: {
+          url: 1,
+          type: 1,
+          first_name: 1,
+          last_name: 1,
+          user_headline: 1,
+          user_profile_image: 1,
+        },
+        populate: {
+          path: 'user_profile_image',
+          model: 'media',
+          select: {
+            url: 1,
+          },
+        },
+      })
+      .select('-organization_code');
     return { notifications };
   }
 
