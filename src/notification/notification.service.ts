@@ -76,8 +76,10 @@ export class NotificationService {
     const notifications = await this.notificationModel
       .find(fo)
       .sort({ created_at: -1 })
+      .skip(body.skip)
+      .limit(body.limit)
       .populate({
-        path: 'target_user_id',
+        path: 'user_id',
         select: {
           url: 1,
           type: 1,
@@ -95,8 +97,7 @@ export class NotificationService {
         },
       })
       .select('-organization_code');
-    // .skip(body.skip || 0)
-    // .limit(body.limit || 10);
+
     return { notifications, count: notifications.length };
   }
 
