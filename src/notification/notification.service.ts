@@ -76,8 +76,8 @@ export class NotificationService {
     const notifications = await this.notificationModel
       .find(fo)
       .sort({ created_at: -1 })
-      .skip(body.skip)
-      .limit(body.limit)
+      .skip(+body.skip)
+      .limit(+body.limit)
       .populate({
         path: 'user_id',
         select: {
