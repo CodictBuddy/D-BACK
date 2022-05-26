@@ -97,7 +97,7 @@ export class NotificationService {
         },
       })
       .select('-organization_code');
-    return { notifications };
+    return { notifications, count: notifications.length };
   }
 
   async getUnreadList(organization_code, token) {
