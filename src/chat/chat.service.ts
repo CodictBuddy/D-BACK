@@ -85,7 +85,7 @@ export class ChatService {
             {
               organization_code,
               room_cat: { $eq: 'individual' },
-              is_delete: false,
+              // is_delete: false,
             },
             { members: { $in: [token.id, body.user_id] } },
           ],
