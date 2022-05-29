@@ -81,14 +81,20 @@ export class ChatController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('get-room-detail')
   async getRoomDetail(
     @Res() res: Response,
+    @GetToken() token: UserToken,
     @Param('organization_code') organization,
     @Body() body: any,
   ) {
     try {
-      let data = await this.chatService.getRoomDetail(+organization, body);
+      let data = await this.chatService.getRoomDetail(
+        +organization,
+        token,
+        body,
+      );
       return res.json(data);
     } catch (err) {
       const { code, response } = await this.sservice.processError(
