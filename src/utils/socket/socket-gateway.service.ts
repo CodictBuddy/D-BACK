@@ -44,32 +44,20 @@ export class socketGateway implements OnGatewayDisconnect, OnGatewayConnection {
   }
 
   @SubscribeMessage('add-message')
-  async addMessage(client: Socket, message) {
-    let msgId;
-    let fv = {
-      room_id: message.roomId,
-      sender_id: message.myId,
-      receiver_id: message.othrUsrId,
+  async addMessage(message) {
+    this.server.to(message.roomId).emit('message', {
+      _id: message._id,
       content: message.content,
-    };
-    msgId = await this.createMessages(fv);
-
-    if (msgId) {
-      this.server.to(message.roomId).emit('message', {
-        _id: msgId,
-        content: message.content,
-        from: this.nicknames[message.myId],
-        sender_id: { _id: message.myId },
-        created: new Date(),
-        message_type: 'conversation',
-      });
-    }
+      from: this.nicknames[message.sender_id],
+      sender_id: { _id: message.sender_id },
+      created: new Date(),
+      message_type: message.message_type,
+    });
   }
 
   @SubscribeMessage('deleteMessage')
-  deleteMessage(client: Socket, message) {
+  deleteMessage(message) {
     this.server.to(message.room_id).emit('deleteMessage', {
-      content: message.content,
       position: message.position,
     });
   }
