@@ -158,14 +158,14 @@ export class ChatService {
       });
       newMessage['userIds'] = roomMembers.members.filter(el => el != token.id);
       // trigger push notification to reciever
-      await this.notificationService.triggerPushNotifications(
-        'my name',
-        'my name have sent u a new message',
-        fv.receiver_id,
-        organization_code,
-      );
-      // trigger socket
-      this.socket.addMessage(newMessage);
+      // await this.notificationService.triggerPushNotifications(
+      //   'my name',
+      //   'my name have sent u a new message',
+      //   fv.receiver_id,
+      //   organization_code,
+      // );
+      // // trigger socket
+      // this.socket.addMessage(newMessage);
       return newMessage;
     } catch (err) {
       throw err;
@@ -206,10 +206,10 @@ export class ChatService {
       });
 
       // trigger socket
-      this.socket.deleteMessage({
-        room_id: body.room_id,
-        position: body.position,
-      });
+      // this.socket.deleteMessage({
+      //   room_id: body.room_id,
+      //   position: body.position,
+      // });
       return { message: 'Message deleted successfully' };
     } catch (err) {
       throw err;
