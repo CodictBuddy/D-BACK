@@ -44,7 +44,7 @@ export class socketGateway implements OnGatewayDisconnect, OnGatewayConnection {
   }
 
   @SubscribeMessage('add-message')
-  async addMessage(message) {
+  async addMessage(client: Socket, message) {
     this.server.to(message.roomId).emit('message', {
       _id: message._id,
       content: message.content,
@@ -56,7 +56,7 @@ export class socketGateway implements OnGatewayDisconnect, OnGatewayConnection {
   }
 
   @SubscribeMessage('deleteMessage')
-  deleteMessage(message) {
+  deleteMessage(client: Socket, message) {
     this.server.to(message.room_id).emit('deleteMessage', {
       position: message.position,
     });
