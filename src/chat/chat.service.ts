@@ -85,43 +85,41 @@ export class ChatService {
             {
               organization_code,
               room_cat: { $eq: 'individual' },
-              // is_delete: false,
             },
             { members: { $in: [token.id, body.user_id] } },
           ],
         })
-        .select('-organization_code');
-      // .populate({
-      //   path: 'members',
-      //   // select: {
-      //   //   url: 1,
-      //   //   type: 1,
-      //   //   first_name: 1,
-      //   //   last_name: 1,
-      //   //   user_headline: 1,
-      //   //   user_profile_image: 1,
-      //   // },
-      //   // populate: {
-      //   //   path: 'user_profile_image',
-      //   //   model: 'media',
-      //   //   select: {
-      //   //     url: 1,
-      //   //   },
-      //   // },
-      // })
+        .populate({
+          path: 'members',
+          select: {
+            url: 1,
+            type: 1,
+            first_name: 1,
+            last_name: 1,
+            user_headline: 1,
+            user_profile_image: 1,
+          },
+          populate: {
+            path: 'user_profile_image',
+            model: 'media',
+            select: {
+              url: 1,
+            },
+          },
+        })
+        .select('-organization_code')
+        .lean();
 
-      // .lean();
+      if (!room_data) return { message: 'no room found' };
+      room_data['members'] = room_data.members.filter(
+        el => el['_id'] != token.id,
+      );
 
-      // if (!room_data) return { message: 'no room found' };
-      // room_data['connectedUser'] = room_data.members.filter(
-      //   el => el['_id'] != token.id,
-      // );
-      if (room_data) {
-        chat_data = await this.cMessageModel.findOne({
-          organization_code,
-          room_id: room_data._id,
-        });
-      }
+      chat_data = await this.cMessageModel.findOne({
+        organization_code,
+        room_id: room_data._id,
+      });
+
       return { room_data, chat_data };
       // .populate('room_id');
       //  need to populate sender and reciever data
