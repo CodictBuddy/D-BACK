@@ -29,11 +29,15 @@ export class ChatService {
       let conditionObj = {};
       let fv = {
         organization_code,
-        room_name: body.room_name,
-        room_cat: body.room_cat,
-        room_type: body.room_type,
-        members: body.members,
+        room_name: body.room_name || '',
+        members: [...body.members, token.id],
       };
+      if (body.room_cat) {
+        fv['room_cat'] = body.room_cat;
+      }
+      if (body.room_type) {
+        fv['room_type'] = body.room_type;
+      }
 
       if (body.room_cat === 'CGroup') {
         (fv['created_by'] = body.created_by),
