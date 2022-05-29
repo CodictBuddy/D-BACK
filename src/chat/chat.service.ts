@@ -165,7 +165,7 @@ export class ChatService {
       //   organization_code,
       // );
       // // trigger socket
-      // this.socket.addMessage(newMessage);
+      this.socket.addMessage(newMessage);
       return newMessage;
     } catch (err) {
       throw err;
@@ -206,10 +206,10 @@ export class ChatService {
       });
 
       // trigger socket
-      // this.socket.deleteMessage({
-      //   room_id: body.room_id,
-      //   position: body.position,
-      // });
+      this.socket.deleteMessage({
+        room_id: body.room_id,
+        position: body.position,
+      });
       return { message: 'Message deleted successfully' };
     } catch (err) {
       throw err;
