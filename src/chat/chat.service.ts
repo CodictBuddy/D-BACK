@@ -113,7 +113,7 @@ export class ChatService {
       if (!room_data) return { message: 'no room found' };
       room_data['members'] = room_data.members.filter(
         el => el['_id'] != token.id,
-      );
+      )?.[0];
 
       chat_data = await this.cMessageModel.findOne({
         organization_code,
@@ -122,7 +122,7 @@ export class ChatService {
 
       return { room_data, chat_data };
       // .populate('room_id');
-      //  need to populate sender and reciever data
+      //  need to populate sender and reciever data in chat data
     } catch (err) {
       throw err;
     }
