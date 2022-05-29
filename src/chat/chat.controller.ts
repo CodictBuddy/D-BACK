@@ -151,7 +151,11 @@ export class ChatController {
     @Body() body: any,
   ) {
     try {
-      let data = await this.chatService.deleteMessage(+organization,token, body);
+      let data = await this.chatService.deleteMessage(
+        +organization,
+        token,
+        body,
+      );
       return res.json(data);
     } catch (err) {
       const { code, response } = await this.sservice.processError(

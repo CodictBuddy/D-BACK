@@ -12,9 +12,9 @@ import { Model } from 'mongoose';
 @Injectable()
 export class ChatService {
   constructor(
-    @InjectModel('room')
+    @InjectModel('chat-room')
     private cRoomModel: Model<IChatRoomModel>,
-    @InjectModel('message')
+    @InjectModel('chat-message')
     private cMessageModel: Model<IChatMessageModel>,
     private sservice: SharedService,
     private utilsService: UtilsService,

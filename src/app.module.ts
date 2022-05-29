@@ -20,7 +20,7 @@ import { ConfigModule } from '@nestjs/config';
 import { MediaModule } from './media/media.module';
 import { ConnectionsModule } from './connections/connections.module';
 import { NotificationModule } from './notification/notification.module';
-// import { ChatModule } from './chat/chat.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -43,7 +43,7 @@ import { NotificationModule } from './notification/notification.module';
     MediaModule,
     ConnectionsModule,
     NotificationModule,
-    // ChatModule,
+    ChatModule,
     // OrganizationModule,
     // RoleModule,
     // DepartmentModule,
