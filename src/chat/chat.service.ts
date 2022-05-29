@@ -87,7 +87,7 @@ export class ChatService {
               room_cat: { $eq: 'individual' },
               is_delete: false,
             },
-            { members: { $in: [token.id, body.user_id] }, organization_code },
+            { members: { $in: [token.id, body.user_id] } },
           ],
         })
         .select('-organization_code');
