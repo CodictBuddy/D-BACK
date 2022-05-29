@@ -115,14 +115,18 @@ export class ChatService {
         el => el['_id'] != token.id,
       )?.[0];
 
-      chat_data = await this.cMessageModel.findOne({
-        organization_code,
-        room_id: room_data._id,
-      });
+      return room_data;
+    } catch (err) {
+      throw err;
+    }
+  }
 
-      return { room_data, chat_data };
-      // .populate('room_id');
-      //  need to populate sender and reciever data in chat data
+  async getChatList(organization_code, token, room_id) {
+    try {
+      return await this.cMessageModel.findOne({
+        organization_code,
+        room_id,
+      });
     } catch (err) {
       throw err;
     }

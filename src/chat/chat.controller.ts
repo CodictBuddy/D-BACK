@@ -104,6 +104,29 @@ export class ChatController {
       return res.status(code).json(response);
     }
   }
+  @UseGuards(JwtAuthGuard)
+  @Get('get-chat-list/:roomId')
+  async getChatList(
+    @Res() res: Response,
+    @GetToken() token: UserToken,
+    @Param('organization_code') organization,
+    @Param('roomId') roomId,
+  ) {
+    try {
+      let data = await this.chatService.getChatList(
+        +organization,
+        token,
+        roomId,
+      );
+      return res.json(data);
+    } catch (err) {
+      const { code, response } = await this.sservice.processError(
+        err,
+        this.constructor.name,
+      );
+      return res.status(code).json(response);
+    }
+  }
 
   @UseGuards(JwtAuthGuard)
   @Get('get-my-rooms-list')
