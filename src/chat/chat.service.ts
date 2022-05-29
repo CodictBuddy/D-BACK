@@ -78,6 +78,7 @@ export class ChatService {
 
   async getRoomDetail(organization_code, token, body) {
     try {
+      let chat_data = {};
       let room_data = await this.cRoomModel
         .findOne({
           $and: [
@@ -111,18 +112,19 @@ export class ChatService {
 
       // .lean();
 
-      if (!room_data) return { message: 'no room found' };
+      // if (!room_data) return { message: 'no room found' };
       // room_data['connectedUser'] = room_data.members.filter(
       //   el => el['_id'] != token.id,
       // );
-
-      let chat_data = await this.cMessageModel.findOne({
-        organization_code,
-        room_id: room_data._id,
-      });
+      if (room_data) {
+        chat_data = await this.cMessageModel.findOne({
+          organization_code,
+          room_id: room_data._id,
+        });
+      }
+      return { room_data, chat_data };
       // .populate('room_id');
       //  need to populate sender and reciever data
-      return { room_data, chat_data };
     } catch (err) {
       throw err;
     }
