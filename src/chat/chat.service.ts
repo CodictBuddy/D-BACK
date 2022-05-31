@@ -132,7 +132,7 @@ export class ChatService {
     }
   }
 
-  async getMyRoomList(organization_code, token) {
+  async getMyRoomList(organization_code, token, skip = 0, limit = 20) {
     try {
       let data = await this.cRoomModel
         .find({
@@ -141,39 +141,35 @@ export class ChatService {
             { room_cat: { $ne: 'CGroup' } },
           ],
         })
-        .sort({ createdAt: -1 });
-      // .populate({
-      //   path: "members",
-      //   select: { first_name: 1 },
-      //   populate: {
-      //     path: "user_media.media_id",
-      //     select: { media_url: 1 },
-      //   },
-      // })
-      // .lean()
-      // .select({ room_name: 1, room_cat: 1 });
+        .sort({ created_at: -1 })
+        .skip(skip)
+        .limit(limit)
+        .populate({
+          path: 'members',
+          select: {
+            url: 1,
+            type: 1,
+            first_name: 1,
+            last_name: 1,
+            user_headline: 1,
+            user_profile_image: 1,
+          },
+          populate: {
+            path: 'user_profile_image',
+            model: 'media',
+            select: {
+              url: 1,
+            },
+          },
+        })
+        .select('-organization_code')
+        .lean();
 
-      // for (let i = 0; i < data.length; i++) {
-      //   if (data[i].room_cat == "individual") {
-      //     let member = data[i].members.find((el) => {
-      //       return el._id != token.id;
-      //     });
-
-      //     if (member) {
-      //       data[i]["room_name"] = member.first_name.find(
-      //         (el) => el.description
-      //       ).description;
-      //       data[i]["room_media"] = member.user_media.find(
-      //         (el) => el.media_id
-      //       ).media_id.media_url;
-      //     }
-      //   }
-
-      //   let messageData = await this.cMessageModel
-      //     .findOne({ room_id: data[i]._id })
-      //     .sort({ created_at: -1 });
-      //   data[i]["current_message"] = messageData?.content;
-      // }
+      for (let i = 0; i < data.length; i++) {
+        data[i]['members'] = data[i].members.filter(
+          el => el['_id'] != token.id,
+        )?.[0];
+      }
 
       return data;
     } catch (err) {
