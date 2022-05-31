@@ -12,6 +12,7 @@ import {
   Res,
   UseGuards,
   Get,
+  Query,
 } from '@nestjs/common';
 import { Response } from 'express';
 
@@ -133,10 +134,17 @@ export class ChatController {
   async getRoomList(
     @Res() res: Response,
     @Param('organization_code') organization,
+    @Query('skip') skip,
+    @Query('limit') limit,
     @GetToken() token: UserToken,
   ) {
     try {
-      let data = await this.chatService.getMyRoomList(+organization, token);
+      let data = await this.chatService.getMyRoomList(
+        +organization,
+        token,
+        +skip,
+        +limit,
+      );
       return res.json(data);
     } catch (err) {
       const { code, response } = await this.sservice.processError(
