@@ -224,10 +224,45 @@ export class ChatService {
         .sort('-created_at DESC')
         .skip(body.skip)
         .limit(body.limit)
-        .populate('sender_id')
-        .populate('receiver_id');
+        .populate({
+          path: 'sender_id',
+          select: {
+            url: 1,
+            type: 1,
+            first_name: 1,
+            last_name: 1,
+            user_headline: 1,
+            user_profile_image: 1,
+          },
+          populate: {
+            path: 'user_profile_image',
+            model: 'media',
+            select: {
+              url: 1,
+            },
+          },
+        })
+        .populate({
+          path: 'receiver_id',
+          select: {
+            url: 1,
+            type: 1,
+            first_name: 1,
+            last_name: 1,
+            user_headline: 1,
+            user_profile_image: 1,
+          },
+          populate: {
+            path: 'user_profile_image',
+            model: 'media',
+            select: {
+              url: 1,
+            },
+          },
+        })
+        .populate('created_by', 'first_name');
+      // .populate('receiver_id');
       // .populate('room_id')
-      // .populate('created_by', 'first_name');
 
       let count = await this.cMessageModel.find(filter).count();
       return { messages, count };
