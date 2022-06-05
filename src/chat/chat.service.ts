@@ -219,8 +219,9 @@ export class ChatService {
         is_delete: false,
       };
       console.log('filter', JSON.stringify(filter));
-      let messages = await this.cMessageModel.find(filter);
-      // .sort('-created_at DESC')
+      let messages = await this.cMessageModel
+        .find(filter)
+        .sort('-created_at DESC');
       // .skip(body.skip)
       // .limit(body.limit)
       // .populate('sender_id')
