@@ -223,9 +223,9 @@ export class ChatService {
         .find(filter)
         .sort('-created_at DESC')
         .skip(body.skip)
-        .limit(body.limit);
-      // .populate('sender_id')
-      // .populate('receiver_id')
+        .limit(body.limit)
+        .populate('sender_id')
+        .populate('receiver_id');
       // .populate('room_id')
       // .populate('created_by', 'first_name');
 
