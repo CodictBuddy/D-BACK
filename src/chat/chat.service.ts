@@ -221,9 +221,9 @@ export class ChatService {
       console.log('filter', JSON.stringify(filter));
       let messages = await this.cMessageModel
         .find(filter)
-        .sort('-created_at DESC');
-      // .skip(body.skip)
-      // .limit(body.limit)
+        .sort('-created_at DESC')
+        .skip(body.skip)
+        .limit(body.limit);
       // .populate('sender_id')
       // .populate('receiver_id')
       // .populate('room_id')
