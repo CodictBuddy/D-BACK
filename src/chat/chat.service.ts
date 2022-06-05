@@ -259,10 +259,7 @@ export class ChatService {
               url: 1,
             },
           },
-        })
-        .populate('created_by', 'first_name');
-      // .populate('receiver_id');
-      // .populate('room_id')
+        });
 
       let count = await this.cMessageModel.find(filter).count();
       return { messages, count };
@@ -273,18 +270,25 @@ export class ChatService {
 
   async deleteMessage(organization_code, token, body) {
     try {
-      await this.cMessageModel.deleteOne({
-        organization_code,
-        room_id: body.room_id,
-        _id: body.message_id,
-      });
+      const date = new Date().toISOString();
+      if (body.created_at.split('T')[0] !== date.split('T')[0])
+        return { message: 'cannot delelte old message' };
+      const deletedData = await this.cMessageModel
+        .deleteOne({
+          organization_code,
+          room_id: body.room_id,
+          _id: body.message_id,
+          sender_id: token.id,
+        })
+        .then(() => {
+          // trigger socket
+          this.socket.deleteMessage({
+            room_id: body.room_id,
+            position: body.position,
+          });
+        });
 
-      // trigger socket
-      this.socket.deleteMessage({
-        room_id: body.room_id,
-        position: body.position,
-      });
-      return { message: 'Message deleted successfully' };
+      return { message: 'Message deleted successfully', deletedData };
     } catch (err) {
       throw err;
     }
