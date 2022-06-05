@@ -219,15 +219,14 @@ export class ChatService {
         is_delete: false,
       };
       console.log('filter', JSON.stringify(filter));
-      let messages = await this.cMessageModel
-        .find(filter)
-        .sort('-created_at DESC')
-        .skip(body.skip)
-        .limit(body.limit)
-        .populate('sender_id')
-        .populate('receiver_id')
-        .populate('room_id')
-        .populate('created_by', 'first_name');
+      let messages = await this.cMessageModel.find(filter);
+      // .sort('-created_at DESC')
+      // .skip(body.skip)
+      // .limit(body.limit)
+      // .populate('sender_id')
+      // .populate('receiver_id')
+      // .populate('room_id')
+      // .populate('created_by', 'first_name');
 
       let count = await this.cMessageModel.find(filter).count();
       return { messages, count };
