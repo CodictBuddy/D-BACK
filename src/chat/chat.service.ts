@@ -1,5 +1,6 @@
+import { AppException } from './../shared/app-exception';
 import { InjectModel } from '@nestjs/mongoose';
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpStatus } from '@nestjs/common';
 import { IChatMessageModel } from './schema/chat_message.schema';
 import { IChatRoomModel } from './schema/chat_room.schema';
 import { NotificationService } from './../notification/notification.service';
@@ -190,7 +191,28 @@ export class ChatService {
         message_type: body.message_type,
       };
       let newMessage = await this.cMessageModel.create(fv);
-
+      if (!newMessage)
+        throw new AppException('failed to send message', HttpStatus.FORBIDDEN);
+      const newMessageProcessed = await this.cMessageModel
+        .findOne({ _id: newMessage._id })
+        .populate({
+          path: 'sender_id',
+          select: {
+            url: 1,
+            type: 1,
+            first_name: 1,
+            last_name: 1,
+            user_headline: 1,
+            user_profile_image: 1,
+          },
+          populate: {
+            path: 'user_profile_image',
+            model: 'media',
+            select: {
+              url: 1,
+            },
+          },
+        });
       let roomMembers = await this.cRoomModel.findOne({
         organization_code,
         _id: body.room_id,
@@ -205,7 +227,7 @@ export class ChatService {
       // );
       // // trigger socket
       this.socket.addMessage(newMessage);
-      return newMessage;
+      return newMessageProcessed;
     } catch (err) {
       throw err;
     }
