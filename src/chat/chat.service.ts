@@ -263,25 +263,8 @@ export class ChatService {
               url: 1,
             },
           },
-        })
-        .populate({
-          path: 'receiver_id',
-          select: {
-            url: 1,
-            type: 1,
-            first_name: 1,
-            last_name: 1,
-            user_headline: 1,
-            user_profile_image: 1,
-          },
-          populate: {
-            path: 'user_profile_image',
-            model: 'media',
-            select: {
-              url: 1,
-            },
-          },
         });
+      messages.reverse();
 
       let count = await this.cMessageModel.find(filter).count();
       return { messages, count };
