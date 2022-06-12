@@ -32,6 +32,7 @@ export interface IChatMessageModel extends mongoose.Document {
       attachments: [{ type: String }],
       delete_type: { type: String },
       is_delete: { type: Boolean, default: false },
+      is_edited: { type: Boolean, default: false },
     },
     {
       collection: "chat-message",

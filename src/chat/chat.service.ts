@@ -285,6 +285,8 @@ export class ChatService {
             room_id: body.room_id,
             _id: body.message_id,
             sender_id: token.id,
+          },
+          {
             content: body.content,
             is_edited: true,
           },
