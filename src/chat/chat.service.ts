@@ -286,6 +286,7 @@ export class ChatService {
             _id: body.message_id,
             sender_id: token.id,
             content: body.content,
+            is_edited: true,
           },
           {
             new: true,
