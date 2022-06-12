@@ -62,7 +62,7 @@ export class ChatController {
     }
   }
 
-// update existing message api 
+  // update existing message api
 
   @UseGuards(JwtAuthGuard)
   @Post('create-room')
@@ -167,6 +167,30 @@ export class ChatController {
   ) {
     try {
       let data = await this.chatService.getMessageList(
+        +organization,
+        token,
+        body,
+      );
+      return res.json(data);
+    } catch (err) {
+      const { code, response } = await this.sservice.processError(
+        err,
+        this.constructor.name,
+      );
+      return res.status(code).json(response);
+    }
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('update-message')
+  async updateMessage(
+    @GetToken() token: UserToken,
+    @Res() res: Response,
+    @Param('organization_code') organization,
+    @Body() body: any,
+  ) {
+    try {
+      let data = await this.chatService.updateMessage(
         +organization,
         token,
         body,

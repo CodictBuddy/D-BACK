@@ -273,11 +273,42 @@ export class ChatService {
     }
   }
 
+  async updateMessage(organization_code, token, body) {
+    try {
+      const date = new Date().toISOString();
+      if (body.created_at.split('T')[0] !== date.split('T')[0])
+        return { message: 'cannot update old message' };
+      const updatedData = await this.cMessageModel
+        .findOneAndUpdate(
+          {
+            organization_code,
+            room_id: body.room_id,
+            _id: body.message_id,
+            sender_id: token.id,
+            content: body.content,
+          },
+          {
+            new: true,
+          },
+        )
+        .then(() => {
+          // trigger socket
+          // this.socket.updateMessage({
+          //   room_id: body.room_id,
+          //   position: body.position,
+          // });
+        });
+
+      return { message: 'Message updated successfully', updatedData };
+    } catch (err) {
+      throw err;
+    }
+  }
   async deleteMessage(organization_code, token, body) {
     try {
       const date = new Date().toISOString();
       if (body.created_at.split('T')[0] !== date.split('T')[0])
-        return { message: 'cannot delelte old message' };
+        return { message: 'cannot delete old message' };
       const deletedData = await this.cMessageModel
         .deleteOne({
           organization_code,
