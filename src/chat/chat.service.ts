@@ -87,7 +87,8 @@ export class ChatService {
               organization_code,
               room_cat: { $eq: 'individual' },
             },
-            { members: { $in: [token.id, body.user_id] } },
+            { members: [token.id, body.user_id] },
+            // { members: { $in: [token.id, body.user_id] } },
           ],
         })
         .populate({
@@ -278,29 +279,27 @@ export class ChatService {
       const date = new Date().toISOString();
       if (body.created_at.split('T')[0] !== date.split('T')[0])
         return { message: 'cannot update old message' };
-      const updatedData = await this.cMessageModel
-        .findOneAndUpdate(
-          {
-            organization_code,
-            room_id: body.room_id,
-            _id: body.message_id,
-            sender_id: token.id,
-          },
-          {
-            content: body.content,
-            is_edited: true,
-          },
-          {
-            new: true,
-          },
-        )
-          // trigger socket
-          this.socket.updateMessage({
-            room_id: body.room_id,
-            position: body.position,
-            data:updatedData
-          });
-        
+      const updatedData = await this.cMessageModel.findOneAndUpdate(
+        {
+          organization_code,
+          room_id: body.room_id,
+          _id: body.message_id,
+          sender_id: token.id,
+        },
+        {
+          content: body.content,
+          is_edited: true,
+        },
+        {
+          new: true,
+        },
+      );
+      // trigger socket
+      this.socket.updateMessage({
+        room_id: body.room_id,
+        position: body.position,
+        data: updatedData,
+      });
 
       return { message: 'Message updated successfully', updatedData };
     } catch (err) {
@@ -324,7 +323,7 @@ export class ChatService {
           this.socket.deleteMessage({
             room_id: body.room_id,
             position: body.position,
-            message_id:body.message_id
+            message_id: body.message_id,
           });
         });
 
