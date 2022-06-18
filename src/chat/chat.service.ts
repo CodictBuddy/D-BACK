@@ -226,7 +226,7 @@ export class ChatService {
       //   organization_code,
       // );
       // // trigger socket
-      this.socket.addMessage(newMessage);
+      this.socket.addMessage(newMessageProcessed);
       return newMessageProcessed;
     } catch (err) {
       throw err;
@@ -294,13 +294,13 @@ export class ChatService {
             new: true,
           },
         )
-        .then(() => {
           // trigger socket
-          // this.socket.updateMessage({
-          //   room_id: body.room_id,
-          //   position: body.position,
-          // });
-        });
+          this.socket.updateMessage({
+            room_id: body.room_id,
+            position: body.position,
+            data:updatedData
+          });
+        
 
       return { message: 'Message updated successfully', updatedData };
     } catch (err) {
@@ -324,6 +324,7 @@ export class ChatService {
           this.socket.deleteMessage({
             room_id: body.room_id,
             position: body.position,
+            message_id:body.message_id
           });
         });
 
