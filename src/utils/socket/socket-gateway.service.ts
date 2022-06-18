@@ -45,7 +45,7 @@ export class socketGateway implements OnGatewayDisconnect, OnGatewayConnection {
 
   @SubscribeMessage('add-message')
   async addMessage(message) {
-    this.server.to(message.reciever_id).emit('message', message);
+    this.server.to(message.room_id).emit('message', message);
   }
 
   @SubscribeMessage('deleteMessage')
@@ -57,7 +57,7 @@ export class socketGateway implements OnGatewayDisconnect, OnGatewayConnection {
 
   @SubscribeMessage('updateMessage')
   updateMessage(message) {
-    this.server.to(message.data.reciever_id).emit('updateMessage', {
+    this.server.to(message.data.room_id).emit('updateMessage', {
       position: message.position,
       updated_mesasge: message.data,
       room_id: message.room_id,
@@ -90,7 +90,7 @@ export class socketGateway implements OnGatewayDisconnect, OnGatewayConnection {
   }
 
   catchNotification(message) {
-    this.server.to(message.roomId).emit('new-notification');
+    this.server.to(message.room_id).emit('new-notification');
   }
 
   catchMessageNotification(message) {
