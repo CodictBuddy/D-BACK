@@ -158,6 +158,28 @@ export class ChatController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('get-my-rooms-id-list')
+  async getRoomIdsList(
+    @Res() res: Response,
+    @Param('organization_code') organization,
+    @GetToken() token: UserToken,
+  ) {
+    try {
+      let data = await this.chatService.getMyRoomIdsList(
+        +organization,
+        token
+      );
+      return res.json(data);
+    } catch (err) {
+      const { code, response } = await this.sservice.processError(
+        err,
+        this.constructor.name,
+      );
+      return res.status(code).json(response);
+    }
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Post('get-message-list')
   async getMessageList(
     @GetToken() token: UserToken,

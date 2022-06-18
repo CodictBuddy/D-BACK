@@ -178,6 +178,24 @@ export class ChatService {
       throw err;
     }
   }
+  async getMyRoomIdsList(organization_code, token) {
+    try {
+      let data = await this.cRoomModel
+        .find({
+          $and: [
+            { members: { $in: [token.id] }, organization_code },
+            { room_cat: { $ne: 'CGroup' } },
+          ],
+        })
+        .sort({ created_at: -1 })
+        .select('_id')
+        .lean();
+
+      return data;
+    } catch (err) {
+      throw err;
+    }
+  }
 
   // chat-message methods
 
