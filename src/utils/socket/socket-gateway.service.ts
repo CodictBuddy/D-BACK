@@ -48,14 +48,14 @@ export class socketGateway implements OnGatewayDisconnect, OnGatewayConnection {
     this.server.to(message.room_id).emit('add-message', message);
   }
 
-  // @SubscribeMessage('deleteMessage')
+  @SubscribeMessage('deleteMessage')
   deleteMessage(message) {
     this.server.to(message.room_id).emit('deleteMessage', {
       position: message.position,
     });
   }
 
-  // @SubscribeMessage('updateMessage')
+  @SubscribeMessage('updateMessage')
   updateMessage(message) {
     this.server.to(message.data.room_id).emit('updateMessage', {
       position: message.position,
