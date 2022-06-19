@@ -43,9 +43,9 @@ export class socketGateway implements OnGatewayDisconnect, OnGatewayConnection {
     client.join(message.room_id);
   }
 
-  // @SubscribeMessage('add-message')
+  @SubscribeMessage('add-message')
   async addMessage(message) {
-    this.server.to(message.room_id).emit('message', message);
+    this.server.to(message.room_id).emit('add-message', message);
   }
 
   // @SubscribeMessage('deleteMessage')
