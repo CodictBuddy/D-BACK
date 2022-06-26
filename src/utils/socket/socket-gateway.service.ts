@@ -43,7 +43,7 @@ export class socketGateway implements OnGatewayDisconnect, OnGatewayConnection {
     client.join(message.room_id);
   }
 
-  @SubscribeMessage('add-message')
+  @SubscribeMessage('addMessage')
   async addMessage(message) {
     this.server.to(message.room_id).emit('add-message', message);
   }
@@ -52,6 +52,8 @@ export class socketGateway implements OnGatewayDisconnect, OnGatewayConnection {
   deleteMessage(message) {
     this.server.to(message.room_id).emit('deleteMessage', {
       position: message.position,
+      room_id: message.room_id,
+      message_id: message.message_id,
     });
   }
 
@@ -59,8 +61,7 @@ export class socketGateway implements OnGatewayDisconnect, OnGatewayConnection {
   updateMessage(message) {
     this.server.to(message.data.room_id).emit('updateMessage', {
       position: message.position,
-      updated_mesasge: message.data,
-      room_id: message.room_id,
+      updated_mesasge: message.data
     });
   }
 
