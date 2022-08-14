@@ -22,7 +22,7 @@ export class ChatService {
     private aservice: AuthService,
     private socket: socketGateway,
     private notificationService: NotificationService,
-  ) {}
+  ) { }
 
   // chat-room methods
   async createRoom(organization_code, token, body) {
@@ -87,7 +87,7 @@ export class ChatService {
               organization_code,
               room_cat: { $eq: 'individual' },
             },
-            { members: [token.id, body.user_id] },
+            { members: [token.id, body.user_id] || [body.user_id, token.id,] },
             // { members: { $in: [token.id, body.user_id] } },
           ],
         })
