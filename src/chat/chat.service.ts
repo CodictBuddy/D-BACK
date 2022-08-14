@@ -87,7 +87,10 @@ export class ChatService {
               organization_code,
               room_cat: { $eq: 'individual' },
             },
-            { members: [token.id, body.user_id] || [body.user_id, token.id,] },
+            {
+              $or: [{ members: [token.id, body.user_id] },
+              { members: [body.user_id, token.id,] }]
+            },
             // { members: { $in: [token.id, body.user_id] } },
           ],
         })
