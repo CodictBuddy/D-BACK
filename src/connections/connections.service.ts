@@ -89,7 +89,19 @@ export class ConnectionsService {
           },
         },
       })
-      .select('-organization_code');
+      .select('-organization_code').lean()
+
+    if (view_type === 2 && connection_status === 'Accept') {
+      connections.map(el => {
+        if (el.user_id['_id'] === token.id) {
+          el['connected_user'] = el.target_user_id
+        } else {
+          el['connected_user'] = el.user_id
+        }
+        el.user_id = el.user_id['_id']
+        el.target_user_id = el.target_user_id['_id']
+      })
+    }
     return { connections };
   }
 
