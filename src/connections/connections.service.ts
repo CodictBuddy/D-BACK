@@ -17,7 +17,7 @@ export class ConnectionsService {
     private aservice: AuthService,
     private socket: socketGateway,
     private notificationService: NotificationService,
-  ) {}
+  ) { }
 
   async getConnectionList(
     organization_code,
@@ -62,11 +62,12 @@ export class ConnectionsService {
         filterObject['user_id'] = token.id;
         populateString = 'target_user_id';
       }
-    } else if (connection_status === 'Accepted') {
+    } else if (view_type === 2 && connection_status === 'Accept') {
       filterObject['$or'] = [
         { user_id: token.id },
         { target_user_id: token.id },
       ];
+      populateString = 'target_user_id user_id'
     }
     const connections = await this.connModel
       .find(filterObject)
