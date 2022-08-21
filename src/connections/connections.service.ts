@@ -71,25 +71,25 @@ export class ConnectionsService {
     }
     const connections = await this.connModel
       .find(filterObject)
-      // .populate({
-      //   path: populateString,
-      //   select: {
-      //     url: 1,
-      //     type: 1,
-      //     first_name: 1,
-      //     last_name: 1,
-      //     user_headline: 1,
-      //     user_profile_image: 1,
-      //   },
-      //   populate: {
-      //     path: 'user_profile_image',
-      //     model: 'media',
-      //     select: {
-      //       url: 1,
-      //     },
-      //   },
-      // })
-      // .select('-organization_code');
+      .populate({
+        path: populateString,
+        select: {
+          url: 1,
+          type: 1,
+          first_name: 1,
+          last_name: 1,
+          user_headline: 1,
+          user_profile_image: 1,
+        },
+        populate: {
+          path: 'user_profile_image',
+          model: 'media',
+          select: {
+            url: 1,
+          },
+        },
+      })
+      .select('-organization_code');
     return { connections };
   }
 
