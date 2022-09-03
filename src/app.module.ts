@@ -21,6 +21,9 @@ import { MediaModule } from './media/media.module';
 import { ConnectionsModule } from './connections/connections.module';
 import { NotificationModule } from './notification/notification.module';
 import { ChatModule } from './chat/chat.module';
+import { PostModule } from './post/post.module';
+import { LikesModule } from './likes/likes.module';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [
@@ -44,6 +47,9 @@ import { ChatModule } from './chat/chat.module';
     ConnectionsModule,
     NotificationModule,
     ChatModule,
+    PostModule,
+    LikesModule,
+    CommentsModule,
     // OrganizationModule,
     // RoleModule,
     // DepartmentModule,

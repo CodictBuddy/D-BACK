@@ -18,5 +18,6 @@ import { connectionsSchema } from './schema/connections.schema';
   ],
   controllers: [ConnectionsController],
   providers: [ConnectionsService],
+  exports: [ConnectionsService],
 })
 export class ConnectionsModule {}
