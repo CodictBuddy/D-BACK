@@ -100,14 +100,14 @@ export class PostService {
             })
             .select('-organization_code')
 
-        return { post, isSelfPost: post.created_by == token.id }
+        return { post, isSelfPost: post.created_by['_id'] == token.id }
     }
 
     async create(organization_code, token, body) {
         const fv = {
             organization_code,
             created_by: token.id,
-            type: body.type, //Post
+            type: body.type, //Anyone/Connections
             title: body.title,
             content: body.content
         };
@@ -128,7 +128,7 @@ export class PostService {
                 for (const el of connectionList) {
                     const notificationObj = {
                         user_id: el,// this is target user id
-                        notification_type: body.type,// Post
+                        notification_type: 'Post',// Post
                         notification_title: body.notification_title,
                         navigation_url: body.navigation_url,
                         notification_message: body.message,
@@ -173,7 +173,8 @@ export class PostService {
             created_by: token.id,
             _id: post_id
         }
-        return await this.postModel.findOneAndRemove(fv);
+        await this.postModel.findOneAndRemove(fv);
+        return { message: 'document deleted successfully' }
     }
 
 }
