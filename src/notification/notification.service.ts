@@ -32,7 +32,7 @@ export class NotificationService {
 
     const ob = await this.notificationModel.create(fv);
     if (ob) {
-      this.socket.catchNotification({ roomId: fv.target_user_id });
+      this.socket.catchNotification({ room_id: fv.target_user_id });
       await this.triggerPushNotifications(
         body.notification_title,
         fv.notification_message,

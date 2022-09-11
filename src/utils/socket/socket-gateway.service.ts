@@ -91,7 +91,7 @@ export class socketGateway implements OnGatewayDisconnect, OnGatewayConnection {
   }
 
   catchNotification(message) {
-    this.server.to(message.room_Id).emit('new-notification');
+    this.server.to(message.room_id).emit('new-notification');
   }
 
   catchMessageNotification(message) {
