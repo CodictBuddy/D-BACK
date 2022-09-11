@@ -8,7 +8,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
-@WebSocketGateway({ path: '' })
+@WebSocketGateway({ path: '/4201121119/4201121119' })
 export class socketGateway implements OnGatewayDisconnect, OnGatewayConnection {
   @WebSocketServer()
   server: Server;
