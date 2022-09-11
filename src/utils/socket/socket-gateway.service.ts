@@ -8,7 +8,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
-@WebSocketGateway({ path: '/4201121119/4201121119' })
+@WebSocketGateway({ path: '' })
 export class socketGateway implements OnGatewayDisconnect, OnGatewayConnection {
   @WebSocketServer()
   server: Server;
@@ -91,7 +91,7 @@ export class socketGateway implements OnGatewayDisconnect, OnGatewayConnection {
   }
 
   catchNotification(message) {
-    this.server.to(message.room_id).emit('new-notification');
+    this.server.to(message.room_Id).emit('new-notification');
   }
 
   catchMessageNotification(message) {
