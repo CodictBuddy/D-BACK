@@ -85,15 +85,15 @@ export class ChatService {
         .findOne({
           // $and: [
           //   {
-              organization_code,
-              room_cat: { $eq: 'individual' },
-              members: { $all: [conv_obj_id(token.id), conv_obj_id(body.user_id)] }
-              // members: { $all: [token.id,body.user_id] }
-            // },
-            // {
-            //   $or: [{ members: [conv_obj_id(token.id), conv_obj_id(body.user_id)] },
-            //   { members: [conv_obj_id(body.user_id), conv_obj_id(token.id)] }]
-            // },
+          organization_code,
+          room_cat: { $eq: 'individual' },
+          members: { $all: [conv_obj_id(token.id), conv_obj_id(body.user_id)] }
+          // members: { $all: [token.id,body.user_id] }
+          // },
+          // {
+          //   $or: [{ members: [conv_obj_id(token.id), conv_obj_id(body.user_id)] },
+          //   { members: [conv_obj_id(body.user_id), conv_obj_id(token.id)] }]
+          // },
           //   { members: { $all: [conv_obj_id(token.id), conv_obj_id(body.user_id)] } },
           // ],
         })
@@ -119,9 +119,14 @@ export class ChatService {
         .lean();
 
       // if (!room_data) return { message: 'no room found' };
-      room_data['members'] = room_data.members.filter(
-        el => el['_id'] != token.id,
-      )?.[0];
+      if (room_data) {
+        room_data['members'] = room_data.members.filter(
+          el => el['_id'] != token.id,
+        )?.[0];
+
+      } else {
+        return { message: 'no room found' }
+      }
 
       return room_data;
     } catch (err) {
