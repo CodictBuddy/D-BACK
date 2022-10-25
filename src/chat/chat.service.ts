@@ -92,7 +92,7 @@ export class ChatService {
             //   $or: [{ members: [conv_obj_id(token.id), conv_obj_id(body.user_id)] },
             //   { members: [conv_obj_id(body.user_id), conv_obj_id(token.id)] }]
             // },
-            { members: { $all: [token.id, body.user_id] } },
+            { members: { $all: [conv_obj_id(token.id), conv_obj_id(body.user_id)] } },
           ],
         })
         .populate({
