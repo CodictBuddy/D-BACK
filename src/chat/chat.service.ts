@@ -83,17 +83,18 @@ export class ChatService {
       let chat_data = {};
       let room_data = await this.cRoomModel
         .findOne({
-          $and: [
-            {
+          // $and: [
+          //   {
               organization_code,
               room_cat: { $eq: 'individual' },
-            },
+              members: { $all: [token.id,body.user_id] }
+            // },
             // {
             //   $or: [{ members: [conv_obj_id(token.id), conv_obj_id(body.user_id)] },
             //   { members: [conv_obj_id(body.user_id), conv_obj_id(token.id)] }]
             // },
-            { members: { $all: [conv_obj_id(token.id), conv_obj_id(body.user_id)] } },
-          ],
+          //   { members: { $all: [conv_obj_id(token.id), conv_obj_id(body.user_id)] } },
+          // ],
         })
         .populate({
           path: 'members',
