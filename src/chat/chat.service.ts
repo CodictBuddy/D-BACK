@@ -94,7 +94,7 @@ export class ChatService {
             //   $or: [{ members: [token.id, body.user_id] },
             //   { members: [body.user_id, token.id] }]
             // },
-            { members: { $in: [token.id, body.user_id] } },
+            { members: { $all: [token.id, body.user_id] } },
           ],
         })
         .populate({
