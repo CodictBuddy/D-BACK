@@ -87,8 +87,8 @@ export class ChatService {
           //   {
           organization_code,
           room_cat: { $eq: 'individual' },
-          members: { $all: [conv_obj_id(token.id), conv_obj_id(body.user_id)] }
-          // members: { $all: [token.id,body.user_id] }
+          // members: { $all: [conv_obj_id(token.id), conv_obj_id(body.user_id)] }
+          members: [token.id,body.user_id] 
           // },
           // {
           //   $or: [{ members: [conv_obj_id(token.id), conv_obj_id(body.user_id)] },
@@ -118,15 +118,11 @@ export class ChatService {
         .select('-organization_code')
         .lean();
 
-      // if (!room_data) return { message: 'no room found' };
-      if (room_data) {
+      if (!room_data) return { message: 'no room found' };
+
         room_data['members'] = room_data.members.filter(
           el => el['_id'] != token.id,
-        )?.[0];
-
-      } else {
-        return { message: 'no room found' }
-      }
+        )?.[0];      
 
       return room_data;
     } catch (err) {
