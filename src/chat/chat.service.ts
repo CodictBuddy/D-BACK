@@ -88,11 +88,11 @@ export class ChatService {
               organization_code,
               room_cat: { $eq: 'individual' },
             },
-            {
-              $or: [{ members: [conv_obj_id(token.id), conv_obj_id(body.user_id)] },
-              { members: [conv_obj_id(body.user_id), conv_obj_id(token.id)] }]
-            },
-            // { members: { $in: [token.id, body.user_id] } },
+            // {
+            //   $or: [{ members: [conv_obj_id(token.id), conv_obj_id(body.user_id)] },
+            //   { members: [conv_obj_id(body.user_id), conv_obj_id(token.id)] }]
+            // },
+            { members: { $all: [token.id, body.user_id] } },
           ],
         })
         .populate({
