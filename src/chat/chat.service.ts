@@ -87,7 +87,8 @@ export class ChatService {
           //   {
               organization_code,
               room_cat: { $eq: 'individual' },
-              members: { $all: [token.id,body.user_id] }
+              members: { $all: [conv_obj_id(token.id), conv_obj_id(body.user_id)] }
+              // members: { $all: [token.id,body.user_id] }
             // },
             // {
             //   $or: [{ members: [conv_obj_id(token.id), conv_obj_id(body.user_id)] },
