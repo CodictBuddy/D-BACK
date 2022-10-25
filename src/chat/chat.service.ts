@@ -90,11 +90,11 @@ export class ChatService {
               // members: { $all: [conv_obj_id(token.id), conv_obj_id(body.user_id)] }
               // members: [token.id,body.user_id] 
             },
-            {
-              $or: [{ members: [token.id, body.user_id] },
-              { members: [body.user_id, token.id] }]
-            },
-            //   { members: { $all: [conv_obj_id(token.id), conv_obj_id(body.user_id)] } },
+            // {
+            //   $or: [{ members: [token.id, body.user_id] },
+            //   { members: [body.user_id, token.id] }]
+            // },
+            { members: { $in: [token.id, body.user_id] } },
           ],
         })
         .populate({
