@@ -118,7 +118,7 @@ export class ChatService {
         .select('-organization_code')
         .lean();
 
-      if (!room_data) return { message: 'no room found' };
+      // if (!room_data) return { message: 'no room found' };
       room_data['members'] = room_data.members.filter(
         el => el['_id'] != token.id,
       )?.[0];
