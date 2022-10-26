@@ -153,7 +153,7 @@ export class ChatService {
       // receiver_id?: any;
 
       // fetch mesages based on recently created 
-      let messageIds = this.sservice.returnUniqueRecords(messages.map(el=>el._id)) 
+      let messageIds = this.sservice.returnUniqueRecords(messages.map(el=>el.room_id)) 
       // collect their ids
       // fetch the rooms with them
       // map last message to corresponding room id
