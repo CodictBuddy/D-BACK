@@ -148,7 +148,7 @@ export class ChatService {
         .find(filter)
         .sort('-created_at DESC')
         .skip(skip)
-        .limit(limit * 10)
+        .limit(limit * 10).lean()
 
       let messageIds = this.sservice.returnUniqueRecords(messages.map(el => el.room_id))
 
