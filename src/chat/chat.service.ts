@@ -191,7 +191,7 @@ export class ChatService {
         data[i]['testKey'] = i
 
         const fetchMessage = messages.find(el => el.room_id == data[i]._id)
-        if (fetchMessage && !data[i]['lastMessage']) {
+        if (!data[i]['lastMessage']) {
           data[i]['testKey2'] = i
           data[i]['lastMessage'] = fetchMessage.content
           data[i]['lastMessageCreated'] = fetchMessage['created_at']
