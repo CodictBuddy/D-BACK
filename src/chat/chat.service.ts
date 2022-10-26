@@ -144,12 +144,12 @@ export class ChatService {
         $or: [{ sender_id: token.id }, { receiver_id: token.id }],
         is_delete: false,
       };
-      let messages = await this.cMessageModel
+      const messages = await this.cMessageModel
         .find(filter)
         .sort('-created_at DESC')
         .skip(skip)
         .limit(limit * 10).lean()
-
+        const messagesCopy:any = [...messages]
       let messageIds = this.sservice.returnUniqueRecords(messages.map(el => el.room_id))
 
       let data = await this.cRoomModel
@@ -190,8 +190,8 @@ export class ChatService {
 
         data[i]['testKey'] = i
 
-        const fetchMessage = messages.find(el => el.room_id == data[i]._id)
-        if (!data[i]['lastMessage']) {
+        const fetchMessage = messagesCopy.find(el => el.room_id == data[i]._id)
+        if (fetchMessage && !data[i]['lastMessage']) {
           data[i]['testKey2'] = i
           data[i]['lastMessage'] = fetchMessage.content
           data[i]['lastMessageCreated'] = fetchMessage['created_at']
