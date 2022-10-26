@@ -188,8 +188,9 @@ export class ChatService {
           el => el['_id'] != token.id,
         )?.[0];
 
-        data[i]['testKey'] = i
         if (messagesCopy.length) {
+          data[i]['testKey'] = i
+          data[0]['messagesList'] = messagesCopy
 
           const fetchMessage = messagesCopy.find(el => el.room_id == data[i]._id)
           if (fetchMessage && !data[i]['lastMessage']) {
