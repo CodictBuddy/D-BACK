@@ -192,6 +192,7 @@ export class ChatService {
           data[i]['testKey'] = i
           data[0]['messagesList'] = messagesCopy
           data[0]['messagesConditionCheck'] = messagesCopy[0].room_id == data[i]._id
+          data[0]['messagesRoomId'] = messagesCopy[0].room_id 
 
           const fetchMessage = messagesCopy.filter(el => el.room_id == data[i]._id)?.[0]
           data[0]['fetched message'] = fetchMessage
