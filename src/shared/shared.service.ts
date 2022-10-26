@@ -10,7 +10,7 @@ export class SharedService {
   constructor(
     // private logger: CustomLogger,
     @InjectModel('sequence') private Sequence: Model<ISequence>,
-  ) {}
+  ) { }
   async createSequence(tenant: number, name: string, defaultValue: number) {
     await this.Sequence.create({ tenant, name, value: defaultValue });
   }
@@ -84,6 +84,9 @@ export class SharedService {
     return filterObj;
   }
 
+  returnUniqueRecords(data: string[]) {
+    return [...new Set(data)]
+  }
   processfetchMyRecordsCondition(
     organization_code,
     user_id,

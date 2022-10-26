@@ -139,10 +139,29 @@ export class ChatService {
 
   async getMyRoomList(organization_code, token, skip = 0, limit = 20) {
     try {
+      let filter = {
+        organization_code,
+        $or:[{sender_id:token.id},{receiver_id:token.id} ],
+        is_delete: false,
+      };
+      let messages = await this.cMessageModel
+        .find(filter)
+        .sort('-created_at DESC')
+        .skip(skip)
+        .limit(limit*10)
+      // sender_id?: any;
+      // receiver_id?: any;
+
+      // fetch mesages based on recently created 
+      let messageIds = this.sservice.returnUniqueRecords(messages.map(el=>el._id)) 
+      // collect their ids
+      // fetch the rooms with them
+      // map last message to corresponding room id
+
       let data = await this.cRoomModel
         .find({
           $and: [
-            { members: { $in: [token.id] }, organization_code },
+            { _id: { $in: messageIds }, organization_code },
             { room_cat: { $ne: 'CGroup' } },
           ],
         })
@@ -176,7 +195,7 @@ export class ChatService {
         )?.[0];
       }
 
-      return data;
+      return {data, messages};
     } catch (err) {
       throw err;
     }
