@@ -193,6 +193,7 @@ export class ChatService {
           data[0]['messagesList'] = messagesCopy
 
           const fetchMessage = messagesCopy.find(el => el.room_id == data[i]._id)
+          data[0]['fetched message'] = fetchMessage
           if (fetchMessage && !data[i]['lastMessage']) {
             data[i]['testKey2'] = i
             data[i]['lastMessage'] = fetchMessage.content
