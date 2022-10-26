@@ -191,7 +191,7 @@ export class ChatService {
         if (messagesCopy.length) {
           data[i]['testKey'] = i
           data[0]['messagesList'] = messagesCopy
-          data[0]['messagesConditionCheck'] = messagesCopy[0].room_id == data[i]._id
+          data[0]['messagesConditionCheck'] = messagesCopy[0].room_id.toString() == data[i]._id.toString()
           data[0]['messagesRoomId'] = messagesCopy[0].room_id 
 
           const fetchMessage = messagesCopy.filter(el => el.room_id == data[i]._id)?.[0]
