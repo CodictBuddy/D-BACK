@@ -85,7 +85,13 @@ export class ChatService {
         .findOne({
               organization_code,
               room_cat: { $eq: 'individual' },
-              members: { $all: [token.id, body.user_id] }
+              $or:[
+                {
+                  members: { $all: [token.id, body.user_id] }
+                },{
+                  _id:body.room_id
+                }
+              ]
         })
         .populate({
           path: 'members',
