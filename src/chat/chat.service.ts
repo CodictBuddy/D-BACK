@@ -83,15 +83,15 @@ export class ChatService {
       let chat_data = {};
       let room_data = await this.cRoomModel
         .findOne({
-              organization_code,
-              room_cat: { $eq: 'individual' },
-              $or:[
-                {
-                  members: { $all: [token.id, body.user_id] }
-                },{
-                  _id:body.room_id
-                }
-              ]
+          organization_code,
+          room_cat: { $eq: 'individual' },
+          $or: [
+            {
+              members: { $all: [token.id, body.user_id] }
+            }, {
+              _id: body.room_id
+            }
+          ]
         })
         .populate({
           path: 'members',
@@ -141,22 +141,16 @@ export class ChatService {
     try {
       let filter = {
         organization_code,
-        $or:[{sender_id:token.id},{receiver_id:token.id} ],
+        $or: [{ sender_id: token.id }, { receiver_id: token.id }],
         is_delete: false,
       };
       let messages = await this.cMessageModel
         .find(filter)
         .sort('-created_at DESC')
         .skip(skip)
-        .limit(limit*10)
-      // sender_id?: any;
-      // receiver_id?: any;
+        .limit(limit * 10)
 
-      // fetch mesages based on recently created 
-      let messageIds = this.sservice.returnUniqueRecords(messages.map(el=>el.room_id)) 
-      // collect their ids
-      // fetch the rooms with them
-      // map last message to corresponding room id
+      let messageIds = this.sservice.returnUniqueRecords(messages.map(el => el.room_id))
 
       let data = await this.cRoomModel
         .find({
@@ -193,9 +187,19 @@ export class ChatService {
         data[i]['members'] = data[i].members.filter(
           el => el['_id'] != token.id,
         )?.[0];
+
+        const fetchMessage = messages.find(el => el.room_id == data[i]._id)
+        if (data[i]._id == fetchMessage?.room_id && !data[i]['lastMessage']) {
+          data[i]['lastMessage'] = fetchMessage.content
+          data[i]['lastMessageCreated'] = fetchMessage['created_at']
+        }
       }
 
-      return {data, messages};
+      data.sort((a, b) => {
+        return (a['lastMessageCreated'] > b['lastMessageCreated']) ? -1 : ((a['lastMessageCreated'] < b['lastMessageCreated']) ? 1 : 0)
+      });
+
+      return data;
     } catch (err) {
       throw err;
     }
