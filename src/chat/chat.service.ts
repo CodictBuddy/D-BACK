@@ -191,7 +191,7 @@ export class ChatService {
         if (messages.length) {
           const fetchMessage = messages.find(el => el.room_id.toString() == data[i]._id.toString())
           if (fetchMessage && !data[i]['lastMessage']) {
-            data[i]['lastMessage'] = fetchMessage.content
+            data[i]['lastMessage'] = fetchMessage.sender_id == token.id ? 'You: ' + fetchMessage.content : fetchMessage.content
             data[i]['lastMessageCreated'] = fetchMessage['created_at']
           }
         }
