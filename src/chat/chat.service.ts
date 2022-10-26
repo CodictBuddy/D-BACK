@@ -188,16 +188,9 @@ export class ChatService {
           el => el['_id'] != token.id,
         )?.[0];
 
-        if (messagesCopy.length) {
-          data[i]['testKey'] = i
-          data[0]['messagesList'] = messagesCopy
-          data[0]['messagesConditionCheck'] = messagesCopy[0].room_id.toString() == data[i]._id.toString()
-          data[0]['messagesRoomId'] = messagesCopy[0].room_id 
-
-          const fetchMessage = messagesCopy.filter(el => el.room_id == data[i]._id)?.[0]
-          data[0]['fetched message'] = fetchMessage
+        if (messages.length) {
+          const fetchMessage = messages.find(el => el.room_id.toString() == data[i]._id.toString())
           if (fetchMessage && !data[i]['lastMessage']) {
-            data[i]['testKey2'] = i
             data[i]['lastMessage'] = fetchMessage.content
             data[i]['lastMessageCreated'] = fetchMessage['created_at']
           }
