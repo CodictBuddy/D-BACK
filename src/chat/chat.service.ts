@@ -149,7 +149,7 @@ export class ChatService {
         .sort('-created_at DESC')
         .skip(skip)
         .limit(limit * 10).lean()
-        const messagesCopy:any = [...messages]
+      const messagesCopy: any = [...messages]
       let messageIds = this.sservice.returnUniqueRecords(messages.map(el => el.room_id))
 
       let data = await this.cRoomModel
@@ -189,12 +189,14 @@ export class ChatService {
         )?.[0];
 
         data[i]['testKey'] = i
+        if (messagesCopy.length) {
 
-        const fetchMessage = messagesCopy.find(el => el.room_id == data[i]._id)
-        if (fetchMessage && !data[i]['lastMessage']) {
-          data[i]['testKey2'] = i
-          data[i]['lastMessage'] = fetchMessage.content
-          data[i]['lastMessageCreated'] = fetchMessage['created_at']
+          const fetchMessage = messagesCopy.find(el => el.room_id == data[i]._id)
+          if (fetchMessage && !data[i]['lastMessage']) {
+            data[i]['testKey2'] = i
+            data[i]['lastMessage'] = fetchMessage.content
+            data[i]['lastMessageCreated'] = fetchMessage['created_at']
+          }
         }
       }
 
