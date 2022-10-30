@@ -136,7 +136,7 @@ export class PostService {
                 console.log('check to se what is connection list here before map', connectionList)
                 console.log('----------------------------');
 
-                connectionList = connectionList.map(el => el.connected_user._id)
+                connectionList = connectionList.map(el => el.connected_user._id.toString())
 
                 console.log('check to se what is connection list here after map', connectionList)
 
@@ -146,8 +146,10 @@ export class PostService {
                         notification_type: 'Post',// Post
                         notification_title: body.notification_title,
                         navigation_url: body.navigation_url + doc._id,
-                        notification_message: body.message,
+                        notification_message: body.notification_message,
                     };
+                    console.log('what is notification message here', notificationObj);
+                    
                     await this.notificationService.create(
                         organization_code,
                         token,
