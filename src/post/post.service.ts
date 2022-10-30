@@ -113,22 +113,27 @@ export class PostService {
         };
 
         const doc = await this.postModel.create(fv);
+        let connectionList = await this.connectionService.getConnectionList(
+            organization_code,
+            token,
+            'Accept',
+            'Connect',
+            2,
+        )['connections']
+        let cList = await this.connectionService.getConnectionList(
+            organization_code,
+            token,
+            'Accept',
+            'Connect',
+            2,
+        )
         if (doc) {
+            console.log('what is connection list here', connectionList, 'doc here', doc, 'c list here', cList);
 
-            let connectionList = await this.connectionService.getConnectionList(
-                organization_code,
-                token,
-                'Accept',
-                'Connect',
-                2,
-            )['connections']
-
-            console.log('what is connection list here', connectionList ,'doc here', doc);
-            
             if (connectionList && connectionList.length) {
                 console.log('check to se what is connection list here before map', connectionList)
                 console.log('----------------------------');
-                
+
                 connectionList = connectionList.map(el => el.connected_user._id)
 
                 console.log('check to se what is connection list here after map', connectionList)

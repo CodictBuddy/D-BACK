@@ -67,7 +67,6 @@ export class ConnectionsService {
         { user_id: token.id },
         { target_user_id: token.id },
       ];
-      // issue
       populateString = 'target_user_id user_id'
     }
 
@@ -93,7 +92,7 @@ export class ConnectionsService {
         },
       })
       .select('-organization_code').lean()
-      console.log('what is connection filter', filterObject , 'and what is res',connections )
+
     if (view_type === 2 && connection_status === 'Accept') {
       connections.forEach(el => {
         if (el.user_id['_id'].toString() == token.id.toString()) {
@@ -106,7 +105,6 @@ export class ConnectionsService {
       })
     }
 
-    console.log('let me check ', connections)
     return { connections };
   }
 
