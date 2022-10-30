@@ -122,6 +122,9 @@ export class PostService {
                 'Connect',
                 2,
             )['connections']
+
+            console.log('what is connection list here', connectionList);
+            
             if (connectionList && connectionList.length) {
                 console.log('check to se what is connection list here before map', connectionList)
                 console.log('----------------------------');
