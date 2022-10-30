@@ -123,7 +123,12 @@ export class PostService {
                 2,
             )['connections']
             if (connectionList && connectionList.length) {
+                console.log('check to se what is connection list here before map', connectionList)
+                console.log('----------------------------');
+                
                 connectionList = connectionList.map(el => el.connected_user._id)
+
+                console.log('check to se what is connection list here after map', connectionList)
 
                 for (const el of connectionList) {
                     const notificationObj = {
