@@ -113,20 +113,22 @@ export class PostService {
         };
 
         const doc = await this.postModel.create(fv);
-        let connectionList = await this.connectionService.getConnectionList(
-            organization_code,
-            token,
-            'Accept',
-            'Connect',
-            2,
-        )['connections']
-        let cList = await this.connectionService.getConnectionList(
+        let connectionList:any = await this.connectionService.getConnectionList(
             organization_code,
             token,
             'Accept',
             'Connect',
             2,
         )
+
+        connectionList = connectionList.connections
+        let cList = await this.connectionService.getConnectionList(
+            organization_code,
+            token,
+            'Accept',
+            'Connect',
+            2,
+        )?.['connections']
         if (doc) {
             console.log('what is connection list here', connectionList, 'doc here', doc, 'c list here', cList);
 
