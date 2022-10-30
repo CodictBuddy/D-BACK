@@ -130,7 +130,7 @@ export class PostService {
                         user_id: el,// this is target user id
                         notification_type: 'Post',// Post
                         notification_title: body.notification_title,
-                        navigation_url: body.navigation_url,
+                        navigation_url: body.navigation_url + doc._id,
                         notification_message: body.message,
                     };
                     await this.notificationService.create(
