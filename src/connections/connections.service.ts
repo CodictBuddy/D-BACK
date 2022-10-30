@@ -67,8 +67,11 @@ export class ConnectionsService {
         { user_id: token.id },
         { target_user_id: token.id },
       ];
+      // issue
       populateString = 'target_user_id user_id'
     }
+
+   
     const connections = await this.connModel
       .find(filterObject)
       .populate({
@@ -90,9 +93,9 @@ export class ConnectionsService {
         },
       })
       .select('-organization_code').lean()
-
+      console.log('what is connection filter', filterObject , 'and what is res',connections )
     if (view_type === 2 && connection_status === 'Accept') {
-      connections.map(el => {
+      connections.forEach(el => {
         if (el.user_id['_id'] == token.id) {
           el['connected_user'] = el.target_user_id
         } else if (el.target_user_id['_id'] == token.id) {

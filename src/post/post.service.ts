@@ -123,7 +123,7 @@ export class PostService {
                 2,
             )['connections']
 
-            console.log('what is connection list here', connectionList);
+            console.log('what is connection list here', connectionList ,'doc here', doc);
             
             if (connectionList && connectionList.length) {
                 console.log('check to se what is connection list here before map', connectionList)
