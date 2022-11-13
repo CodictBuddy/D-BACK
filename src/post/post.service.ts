@@ -48,7 +48,24 @@ export class PostService {
 
 
     async getAllPostList(organization_code, token, body) {
-        const filter = { organization_code }
+        let connectionList: any = await this.connectionService.getConnectionList(
+            organization_code,
+            token,
+            'Accept',
+            'Connect',
+            2,
+        )
+
+        connectionList = connectionList.connections
+        if (connectionList && connectionList.length) {
+
+            connectionList = connectionList.map(el => el.connected_user._id.toString())
+
+        }
+        const filter = {
+            organization_code, $or: [{ type: "Anyone" },
+            { type: "Connections only", created_by: { $in: [...connectionList, token.id.toString()] } }]
+        }
         const posts = await this.postModel
             .find(filter).sort('-created_at DESC')
             .skip(body.skip)
@@ -71,7 +88,11 @@ export class PostService {
                     },
                 },
             })
-            .select('-organization_code')
+            .select('-organization_code').lean()
+
+        posts.forEach(el => {
+            el['isSelfPost'] = el.created_by['_id'] == token.id
+        })
         const count = await this.postModel.find(filter).count();
         return { posts, count }
 
@@ -113,7 +134,7 @@ export class PostService {
         };
 
         const doc = await this.postModel.create(fv);
-        let connectionList:any = await this.connectionService.getConnectionList(
+        let connectionList: any = await this.connectionService.getConnectionList(
             organization_code,
             token,
             'Accept',
@@ -123,7 +144,7 @@ export class PostService {
 
         connectionList = connectionList.connections
         if (doc) {
-          
+
             if (connectionList && connectionList.length) {
 
                 connectionList = connectionList.map(el => el.connected_user._id.toString())
@@ -136,7 +157,7 @@ export class PostService {
                         navigation_url: body.navigation_url + doc._id,
                         notification_message: body.notification_message,
                     };
-                    
+
                     await this.notificationService.create(
                         organization_code,
                         token,
