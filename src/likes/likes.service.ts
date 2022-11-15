@@ -27,7 +27,7 @@ export class LikesService {
                 notification_type: body.type,
                 notification_title: body.notification_title,
                 navigation_url: body.navigation_url,
-                notification_message: body.message,
+                notification_message: body.notification_message,
             };
             await this.notificationService.create(
                 organization_code,
