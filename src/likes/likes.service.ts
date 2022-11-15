@@ -9,7 +9,7 @@ import { ILikesModel } from './schema/likes.schema';
 export class LikesService {
     constructor(
         @InjectModel('likes') private likesModel: Model<ILikesModel>,
-       private notificationService: NotificationService,
+        private notificationService: NotificationService,
     ) { }
 
     async create(organization_code, token, body) {
@@ -52,7 +52,12 @@ export class LikesService {
                 HttpStatus.NOT_FOUND,
             );
         }
-        return await this.likesModel.findOneAndRemove(fv);
+        const res = await this.likesModel.findOneAndRemove(fv);
+        if (res) {
+            return { message: 'Record removed successfully' }
+        }
+
+        return { message: 'Failed to remove record' }
     }
 
     async list(organization_code, token, content_id) {
