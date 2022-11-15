@@ -56,7 +56,7 @@ export class LikesController {
 
 
   @UseGuards(JwtAuthGuard)
-  @Delete(':id')
+  @Delete(':content_id')
   async remove(
     @Res() res: any,
     @GetToken() token: UserToken,

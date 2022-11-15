@@ -48,7 +48,7 @@ export class LikesService {
         const data = await this.likesModel.findOne(fv)
         if (!data) {
             throw new AppException(
-                'no user fount with these credentials',
+                'no user found with these credentials',
                 HttpStatus.NOT_FOUND,
             );
         }
