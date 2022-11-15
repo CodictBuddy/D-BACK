@@ -39,11 +39,11 @@ export class LikesService {
     }
 
 
-    async remove(organization_code, token, id) {
+    async remove(organization_code, token, content_id) {
         const fv = {
             organization_code,
             created_by: token.id,
-            _id: id
+            content_id
         }
         const data = await this.likesModel.findOne(fv)
         if (!data) {
@@ -52,10 +52,7 @@ export class LikesService {
                 HttpStatus.NOT_FOUND,
             );
         }
-        return await this.likesModel.findOneAndRemove({
-            _id: id,
-            type: data.type,
-        });
+        return await this.likesModel.findOneAndRemove(fv);
     }
 
     async list(organization_code, token, content_id) {

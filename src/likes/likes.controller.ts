@@ -61,11 +61,11 @@ export class LikesController {
     @Res() res: any,
     @GetToken() token: UserToken,
     @Param('organization_code') organization,
-    @Param('id') id,
+    @Param('content_id') content_id,
   ) {
     try {
       let data = await this.likesService.remove(+organization, token,
-        id);
+        content_id);
       return res.json(data);
     } catch (err) {
       const { code, response } = this.sservice.processError(
