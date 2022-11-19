@@ -18,7 +18,7 @@ export class CommentsService {
             created_by: token.id,
             content_id: body.content_id,
             type: body.type,
-            content_data: body.content_data
+            comment_data: body.comment_data
         };
 
         const doc = await this.commentsModel.create(fv);
@@ -70,7 +70,7 @@ export class CommentsService {
         const data = await this.commentsModel.findOne(fv)
         if (!data) {
             throw new AppException(
-                'no user fount with these credentials',
+                'no record found with these credentials',
                 HttpStatus.NOT_FOUND,
             );
         }

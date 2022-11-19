@@ -16,7 +16,7 @@ export const commentsSchema = new mongoose.Schema(
         type: { type: String, example: 'content/comment/profile' },
         created_by: { type: obj_id, ref: 'user' },
         content_id: { type: obj_id },
-        content_data: { type: String },
+        comment_data: { type: String },
     },
     {
         collection: 'comments',
