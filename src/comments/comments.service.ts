@@ -102,6 +102,10 @@ export class CommentsService {
             })
             .select('-organization_code').lean()
 
+            doc.forEach(el => {
+                el['isMyComment'] = el.created_by['_id'] == token.id
+            })
+
         const totalCommentsCount = await this.commentsModel.find(fv).count()
 
         let myRecord = await this.commentsModel.findOne({ ...fv, created_by: token.id })
