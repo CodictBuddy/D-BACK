@@ -28,7 +28,7 @@ export class CommentsService {
                 notification_type: body.type,
                 notification_title: body.notification_title,
                 navigation_url: body.navigation_url,
-                notification_message: body.message,
+                notification_message: body.notification_message,
             };
             await this.notificationService.create(
                 organization_code,
@@ -52,10 +52,13 @@ export class CommentsService {
                 HttpStatus.NOT_FOUND,
             );
         }
-        return await this.commentsModel.findOneAndRemove({
+        const res = await this.commentsModel.findOneAndRemove({
             _id: id,
             type: data.type,
         });
+        if(res){
+            return {message:'Record removed successfully'}
+        }
     }
 
     async update(organization_code, token, body) {
@@ -103,7 +106,7 @@ export class CommentsService {
 
         let myRecord = await this.commentsModel.findOne({ ...fv, created_by: token.id })
 
-        return { comments: doc, isLikedByMe: !!myRecord, totalComments: totalCommentsCount }
+        return { comments: doc, isMyComment: !!myRecord, totalComments: totalCommentsCount }
     }
 
 }
