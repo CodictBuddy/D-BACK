@@ -1,0 +1,1 @@
+{"version":3,"file":"get-single-data.decorator.js","sourceRoot":"","sources":["../../../../src/auth/decorators/param/get-single-data.decorator.ts"],"names":[],"mappings":";;;AAAA,2CAAwE;AAE3D,QAAA,aAAa,GAAG,6BAAoB,CAC/C,CAAC,IAAI,EAAE,GAAqB,EAAE,EAAE;IAC9B,MAAM,GAAG,GAAG,GAAG,CAAC,YAAY,EAAE,CAAC,UAAU,EAAE,CAAC;IAC5C,OAAO,GAAG,CAAC,aAAa,CAAC,CAAC;AAC5B,CAAC,CACF,CAAC"}
