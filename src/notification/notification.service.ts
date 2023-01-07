@@ -16,7 +16,7 @@ export class NotificationService {
     private userService: UserService,
     private sservice: SharedService,
     private socket: socketGateway,
-  ) {}
+  ) { }
 
   async create(organization_code, token, body) {
     const fv = {
@@ -135,7 +135,9 @@ export class NotificationService {
     };
 
     const message = {
-      data:{navigation_url, key:'value here'},
+      navigation_url: navigation_url,
+      key: 'some key to check',
+      data: { navigation_url, key: 'value here' },
       notification: {
         title: notification_title || 'You have a new notification',
         body: notification_message,
