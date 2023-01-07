@@ -135,9 +135,10 @@ export class NotificationService {
     };
 
     const message = {
-      navigation_url: navigation_url,
-      key: 'some key to check',
+
       data: { navigation_url, key: 'value here' },
+      click_action: navigation_url,
+      link: navigation_url,
       notification: {
         title: notification_title || 'You have a new notification',
         body: notification_message,
