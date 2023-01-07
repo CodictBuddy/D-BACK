@@ -38,6 +38,7 @@ export class NotificationService {
         fv.notification_message,
         fv.target_user_id,
         fv.organization_code,
+        fv.navigation_url
       );
     }
   }
@@ -122,6 +123,7 @@ export class NotificationService {
     notification_message,
     toUserId,
     organization_code,
+    navigation_url
   ) {
     const userData = await this.userService.getUserById(
       toUserId,
@@ -133,17 +135,13 @@ export class NotificationService {
     };
 
     const message = {
+      data:{navigation_url},
       notification: {
         title: notification_title || 'You have a new notification',
         body: notification_message,
         sound: 'default',
         click_action: 'FCM_PLUGIN_ACTIVITY',
       },
-      // Webpushconfig: {
-      //   fcmOptions: {
-      //     link: '/tabs/notification',
-      //   },
-      // },
     };
 
     const notificationToken = userData?.user?.user_notification_token;
