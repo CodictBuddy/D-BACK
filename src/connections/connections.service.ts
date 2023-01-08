@@ -70,7 +70,7 @@ export class ConnectionsService {
       populateString = 'target_user_id user_id'
     }
 
-
+   
     const connections = await this.connModel
       .find(filterObject)
       .populate({
@@ -136,12 +136,11 @@ export class ConnectionsService {
         navigation_url: body.navigation_url,
         notification_message: body.message,
       };
-      console.log('notification about to get called', notificationObj)
-      // await this.notificationService.create(
-      //   organization_code,
-      //   token,
-      //   notificationObj,
-      // );
+      await this.notificationService.create(
+        organization_code,
+        token,
+        notificationObj,
+      );
     }
     return doc;
   }
