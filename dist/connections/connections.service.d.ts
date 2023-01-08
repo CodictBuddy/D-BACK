@@ -14,7 +14,7 @@ export declare class ConnectionsService {
     private notificationService;
     constructor(connModel: Model<IConnectionsModel>, sservice: SharedService, utilsService: UtilsService, aservice: AuthService, socket: socketGateway, notificationService: NotificationService);
     getConnectionList(organization_code: any, token: any, connection_status: any, type: any, view_type: any): Promise<{
-        connections: Pick<import("mongoose")._LeanDocument<IConnectionsModel>, "organization_code" | "_id" | "__v" | "id" | "target_user_id" | "user_id" | "type" | "connection_status">[];
+        connections: Pick<import("mongoose")._LeanDocument<IConnectionsModel>, "_id" | "__v" | "id" | "organization_code" | "type" | "user_id" | "target_user_id" | "connection_status">[];
     }>;
     getDetail(organization_code: any, token: any, body: any): Promise<IConnectionsModel>;
     create(organization_code: any, token: any, body: any): Promise<IConnectionsModel>;

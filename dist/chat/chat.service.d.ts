@@ -19,12 +19,12 @@ export declare class ChatService {
     removeRoom(organization_code: any, id: any): Promise<{
         message: string;
     }>;
-    getRoomDetail(organization_code: any, token: any, body: any): Promise<Pick<import("mongoose")._LeanDocument<IChatRoomModel>, "organization_code" | "_id" | "__v" | "id" | "created_by" | "room_name" | "recent_message" | "room_cat" | "room_type" | "members"> | {
+    getRoomDetail(organization_code: any, token: any, body: any): Promise<Pick<import("mongoose")._LeanDocument<IChatRoomModel>, "_id" | "__v" | "id" | "organization_code" | "created_by" | "room_name" | "recent_message" | "room_cat" | "room_type" | "members"> | {
         message: string;
     }>;
     getChatList(organization_code: any, token: any, room_id: any): Promise<IChatMessageModel>;
-    getMyRoomList(organization_code: any, token: any, skip?: number, limit?: number): Promise<Pick<import("mongoose")._LeanDocument<IChatRoomModel>, "organization_code" | "_id" | "__v" | "id" | "created_by" | "room_name" | "recent_message" | "room_cat" | "room_type" | "members">[]>;
-    getMyRoomIdsList(organization_code: any, token: any): Promise<Pick<import("mongoose")._LeanDocument<IChatRoomModel>, "organization_code" | "_id" | "__v" | "id" | "created_by" | "room_name" | "recent_message" | "room_cat" | "room_type" | "members">[]>;
+    getMyRoomList(organization_code: any, token: any, skip?: number, limit?: number): Promise<Pick<import("mongoose")._LeanDocument<IChatRoomModel>, "_id" | "__v" | "id" | "organization_code" | "created_by" | "room_name" | "recent_message" | "room_cat" | "room_type" | "members">[]>;
+    getMyRoomIdsList(organization_code: any, token: any): Promise<Pick<import("mongoose")._LeanDocument<IChatRoomModel>, "_id" | "__v" | "id" | "organization_code" | "created_by" | "room_name" | "recent_message" | "room_cat" | "room_type" | "members">[]>;
     newMessage(organization_code: any, token: any, body: any): Promise<IChatMessageModel>;
     getMessageList(organization_code: any, token: any, body: any): Promise<{
         messages: IChatMessageModel[];

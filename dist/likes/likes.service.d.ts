@@ -10,7 +10,7 @@ export declare class LikesService {
         message: string;
     }>;
     list(organization_code: any, token: any, content_id: any): Promise<{
-        likes: Pick<import("mongoose")._LeanDocument<ILikesModel>, "organization_code" | "_id" | "__v" | "id" | "type" | "created_by" | "content_id">[];
+        likes: Pick<import("mongoose")._LeanDocument<ILikesModel>, "_id" | "__v" | "id" | "organization_code" | "type" | "created_by" | "content_id">[];
         isLikedByMe: boolean;
         totalLikes: number;
     }>;

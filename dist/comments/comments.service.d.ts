@@ -11,7 +11,7 @@ export declare class CommentsService {
     }>;
     update(organization_code: any, token: any, body: any): Promise<ICommentsModel>;
     list(organization_code: any, token: any, content_id: any): Promise<{
-        comments: Pick<import("mongoose")._LeanDocument<ICommentsModel>, "organization_code" | "_id" | "__v" | "id" | "type" | "created_by" | "content_id" | "comment_data">[];
+        comments: Pick<import("mongoose")._LeanDocument<ICommentsModel>, "_id" | "__v" | "id" | "organization_code" | "type" | "created_by" | "content_id" | "comment_data">[];
         isMyComment: boolean;
         totalComments: number;
     }>;
