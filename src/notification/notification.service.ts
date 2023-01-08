@@ -138,9 +138,9 @@ export class NotificationService {
 
       
       notification: {
-        title: notification_title || 'You have a new notification',
-        body: notification_message + 'modi',
-        data:  navigation_url,
+        title: 'notification_title' || 'You have a new notification',
+        body: 'notification_message' ,
+        data:  `${navigation_url}`,
         sound: 'default',
         click_action: 'FCM_PLUGIN_ACTIVITY',
       },
