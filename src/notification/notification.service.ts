@@ -140,9 +140,9 @@ export class NotificationService {
       notification: {
         title: notification_title || 'You have a new notification',
         body: notification_message,
-        data:navigation_url,
+        
         sound: 'default',
-        click_action: 'FCM_PLUGIN_ACTIVITY',
+        click_action: 'FCM_PLUGIN_ACTIVITY'+ navigation_url,
       },
     };
 
