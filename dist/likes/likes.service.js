@@ -43,20 +43,21 @@ let LikesService = class LikesService {
         }
         return doc;
     }
-    async remove(organization_code, token, id) {
+    async remove(organization_code, token, content_id) {
         const fv = {
             organization_code,
             created_by: token.id,
-            _id: id
+            content_id
         };
         const data = await this.likesModel.findOne(fv);
         if (!data) {
-            throw new app_exception_1.AppException('no user fount with these credentials', common_1.HttpStatus.NOT_FOUND);
+            throw new app_exception_1.AppException('no user found with these credentials', common_1.HttpStatus.NOT_FOUND);
         }
-        return await this.likesModel.findOneAndRemove({
-            _id: id,
-            type: data.type,
-        });
+        const res = await this.likesModel.findOneAndRemove(fv);
+        if (res) {
+            return { message: 'Record removed successfully' };
+        }
+        return { message: 'Failed to remove record' };
     }
     async list(organization_code, token, content_id) {
         const fv = {

@@ -7,5 +7,5 @@ export declare class LikesController {
     constructor(likesService: LikesService, sservice: SharedService);
     create(res: any, token: UserToken, organization: any, body: any): Promise<any>;
     list(res: any, token: UserToken, organization: any, content_id: string): Promise<any>;
-    remove(res: any, token: UserToken, organization: any, id: any): Promise<any>;
+    remove(res: any, token: UserToken, organization: any, content_id: any): Promise<any>;
 }

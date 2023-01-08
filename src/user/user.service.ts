@@ -33,6 +33,9 @@ export class UserService {
   }
 
   async signUp(body, organization_code) {
+    try{
+
+    
     const user = await this.userModel.findOne({
       organization_code: organization_code,
       'user_email.email': body.email,
@@ -72,6 +75,9 @@ export class UserService {
       this.triggerMail(d);
     }
     return await this.aservice.generateToken(d);
+  }catch(e){
+    return e
+  }
   }
   /**
    * get the user profile  function

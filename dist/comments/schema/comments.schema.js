@@ -10,7 +10,7 @@ exports.commentsSchema = new mongoose.Schema({
     type: { type: String, example: 'content/comment/profile' },
     created_by: { type: common_constants_1.obj_id, ref: 'user' },
     content_id: { type: common_constants_1.obj_id },
-    content_data: { type: String },
+    comment_data: { type: String },
 }, {
     collection: 'comments',
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },

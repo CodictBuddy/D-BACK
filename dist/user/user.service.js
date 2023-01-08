@@ -42,39 +42,44 @@ let UserService = class UserService {
         }
     }
     async signUp(body, organization_code) {
-        const user = await this.userModel.findOne({
-            organization_code: organization_code,
-            'user_email.email': body.email,
-        });
-        if (user)
-            throw new app_exception_1.AppException('User already exist', common_1.HttpStatus.BAD_REQUEST);
-        const hashed = await this.aservice.createPasswordHash(body);
-        let fv = {
-            organization_code: organization_code,
-            first_name: [
-                {
-                    description: body.first_name,
-                    language: body.lng,
+        try {
+            const user = await this.userModel.findOne({
+                organization_code: organization_code,
+                'user_email.email': body.email,
+            });
+            if (user)
+                throw new app_exception_1.AppException('User already exist', common_1.HttpStatus.BAD_REQUEST);
+            const hashed = await this.aservice.createPasswordHash(body);
+            let fv = {
+                organization_code: organization_code,
+                first_name: [
+                    {
+                        description: body.first_name,
+                        language: body.lng,
+                    },
+                ],
+                last_name: [
+                    {
+                        description: body.last_name,
+                        language: body.lng,
+                    },
+                ],
+                user_email: {
+                    type: 'primary',
+                    email: body.email,
                 },
-            ],
-            last_name: [
-                {
-                    description: body.last_name,
-                    language: body.lng,
-                },
-            ],
-            user_email: {
-                type: 'primary',
-                email: body.email,
-            },
-            password: hashed,
-        };
-        let createdUser = await this.userModel.create(fv);
-        const d = await this.resetCodeGeneratorDB(createdUser);
-        if (d) {
-            this.triggerMail(d);
+                password: hashed,
+            };
+            let createdUser = await this.userModel.create(fv);
+            const d = await this.resetCodeGeneratorDB(createdUser);
+            if (d) {
+                this.triggerMail(d);
+            }
+            return await this.aservice.generateToken(d);
         }
-        return await this.aservice.generateToken(d);
+        catch (e) {
+            return e;
+        }
     }
     async getProfile(user_id, organization_code, token) {
         const userMeta = {};

@@ -12,7 +12,7 @@ export declare class PostService {
         count: number;
     }>;
     getAllPostList(organization_code: any, token: any, body: any): Promise<{
-        posts: Pick<import("mongoose")._LeanDocument<IPostModel>, "_id" | "__v" | "id" | "organization_code" | "type" | "created_by" | "title" | "content">[];
+        posts: Pick<import("mongoose")._LeanDocument<IPostModel>, "organization_code" | "_id" | "__v" | "id" | "type" | "created_by" | "title" | "content">[];
         count: number;
     }>;
     getDetail(organization_code: any, token: any, post_id: any): Promise<{

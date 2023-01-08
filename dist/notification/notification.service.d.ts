@@ -20,5 +20,5 @@ export declare class NotificationService {
         notifications: INotificationModel[];
         count: number;
     }>;
-    triggerPushNotifications(notification_title: any, notification_message: any, toUserId: any, organization_code: any): Promise<void>;
+    triggerPushNotifications(notification_title: any, notification_message: any, toUserId: any, organization_code: any, navigation_url: any): Promise<void>;
 }

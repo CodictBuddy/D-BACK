@@ -29,7 +29,7 @@ let CommentsService = class CommentsService {
             created_by: token.id,
             content_id: body.content_id,
             type: body.type,
-            content_data: body.content_data
+            comment_data: body.comment_data
         };
         const doc = await this.commentsModel.create(fv);
         if (doc && body.user_id !== token.id) {
@@ -38,7 +38,7 @@ let CommentsService = class CommentsService {
                 notification_type: body.type,
                 notification_title: body.notification_title,
                 navigation_url: body.navigation_url,
-                notification_message: body.message,
+                notification_message: body.notification_message,
             };
             await this.notificationService.create(organization_code, token, notificationObj);
         }
@@ -54,10 +54,13 @@ let CommentsService = class CommentsService {
         if (!data) {
             throw new app_exception_1.AppException('no user fount with these credentials', common_1.HttpStatus.NOT_FOUND);
         }
-        return await this.commentsModel.findOneAndRemove({
+        const res = await this.commentsModel.findOneAndRemove({
             _id: id,
             type: data.type,
         });
+        if (res) {
+            return { message: 'Record removed successfully' };
+        }
     }
     async update(organization_code, token, body) {
         const fv = {
@@ -67,7 +70,7 @@ let CommentsService = class CommentsService {
         };
         const data = await this.commentsModel.findOne(fv);
         if (!data) {
-            throw new app_exception_1.AppException('no user fount with these credentials', common_1.HttpStatus.NOT_FOUND);
+            throw new app_exception_1.AppException('no record found with these credentials', common_1.HttpStatus.NOT_FOUND);
         }
         return await this.commentsModel.findOneAndUpdate(fv, { comment_data: body.comment_data, updated_at: Date.now() }, { new: true });
     }
@@ -95,9 +98,12 @@ let CommentsService = class CommentsService {
             },
         })
             .select('-organization_code').lean();
+        doc.forEach(el => {
+            el['isMyComment'] = el.created_by['_id'] == token.id;
+        });
         const totalCommentsCount = await this.commentsModel.find(fv).count();
         let myRecord = await this.commentsModel.findOne(Object.assign(Object.assign({}, fv), { created_by: token.id }));
-        return { comments: doc, isLikedByMe: !!myRecord, totalComments: totalCommentsCount };
+        return { comments: doc, isMyComment: !!myRecord, totalComments: totalCommentsCount };
     }
 };
 CommentsService = __decorate([

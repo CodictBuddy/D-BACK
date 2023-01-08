@@ -42,7 +42,7 @@ let NotificationService = class NotificationService {
         const ob = await this.notificationModel.create(fv);
         if (ob) {
             this.socket.catchNotification({ room_id: fv.target_user_id });
-            await this.triggerPushNotifications(body.notification_title, fv.notification_message, fv.target_user_id, fv.organization_code);
+            await this.triggerPushNotifications(body.notification_title, fv.notification_message, fv.target_user_id, fv.organization_code, fv.navigation_url);
         }
     }
     async update(organization_code, token, body) {
@@ -89,7 +89,7 @@ let NotificationService = class NotificationService {
         const notifications = await this.notificationModel.find(Object.assign(Object.assign({}, fo), { isRead: false, isNewNotification: true }));
         return { notifications, count: notifications.length };
     }
-    async triggerPushNotifications(notification_title, notification_message, toUserId, organization_code) {
+    async triggerPushNotifications(notification_title, notification_message, toUserId, organization_code, navigation_url) {
         var _a;
         const userData = await this.userService.getUserById(toUserId, organization_code);
         const options = {
@@ -97,6 +97,7 @@ let NotificationService = class NotificationService {
             timeToLive: 60 * 60 * 24,
         };
         const message = {
+            data: { navigation_url },
             notification: {
                 title: notification_title || 'You have a new notification',
                 body: notification_message,
@@ -109,6 +110,7 @@ let NotificationService = class NotificationService {
             console.log('notification', notificationToken);
             console.log('notification message tracker here', notification_message);
             console.log('notification message type  tracker here', typeof notification_message);
+            console.log('notification object here to trigger', message);
             await admin
                 .messaging()
                 .sendToDevice(notificationToken, message, options)

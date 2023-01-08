@@ -44,9 +44,9 @@ let LikesController = class LikesController {
             return res.status(code).send(response);
         }
     }
-    async remove(res, token, organization, id) {
+    async remove(res, token, organization, content_id) {
         try {
-            let data = await this.likesService.remove(+organization, token, id);
+            let data = await this.likesService.remove(+organization, token, content_id);
             return res.json(data);
         }
         catch (err) {
@@ -79,11 +79,11 @@ __decorate([
 ], LikesController.prototype, "list", null);
 __decorate([
     common_1.UseGuards(jwt_auth_guard_1.JwtAuthGuard),
-    common_1.Delete(':id'),
+    common_1.Delete(':content_id'),
     __param(0, common_1.Res()),
     __param(1, getuser_decorator_1.GetToken()),
     __param(2, common_1.Param('organization_code')),
-    __param(3, common_1.Param('id')),
+    __param(3, common_1.Param('content_id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, usertoken_dto_1.UserToken, Object, Object]),
     __metadata("design:returntype", Promise)
