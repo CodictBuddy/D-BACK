@@ -136,13 +136,13 @@ export class NotificationService {
 
     const message = {
 
-      data:  navigation_url ,
+      
       notification: {
         title: notification_title || 'You have a new notification',
-        body: notification_message,
-        
+        body: notification_message + 'modi',
+        data:  navigation_url,
         sound: 'default',
-        click_action: 'FCM_PLUGIN_ACTIVITY'+ navigation_url,
+        click_action: 'FCM_PLUGIN_ACTIVITY',
       },
     };
 
